@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { mutate } from 'swr';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -47,7 +47,6 @@ async function invalidateModelCaches() {
 }
 
 export function useSettingsPageController() {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { value: globalSettings } = useSettings();
   const { t } = useTranslation('common');
@@ -61,7 +60,6 @@ export function useSettingsPageController() {
     updateDisplay,
     updateSystem,
     updateExperimental,
-    reset,
     save,
     isDirty,
   } = useSettingsForm();
@@ -69,9 +67,9 @@ export function useSettingsPageController() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState(false);
-  const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
-  const isDirtyRef = useRef(isDirty);
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const saveInFlightRef = useRef<Promise<boolean> | null>(null);
+  const flushPendingSaveRef = useRef<() => Promise<boolean>>(async () => true);
 
   const activeTab = useMemo<SettingsTabValue>(() => {
     const tabParam = searchParams.get('tab');
@@ -125,26 +123,6 @@ export function useSettingsPageController() {
       );
     });
   }, [t]);
-
-  useEffect(() => {
-    isDirtyRef.current = isDirty;
-  }, [isDirty]);
-
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (!isDirtyRef.current) {
-        return;
-      }
-
-      event.preventDefault();
-      event.returnValue = '';
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
 
   const handleFactoryReset = useCallback(async () => {
     setIsResetting(true);
@@ -205,77 +183,74 @@ export function useSettingsPageController() {
       return true;
     }
 
+    if (saveInFlightRef.current) {
+      await saveInFlightRef.current;
+      if (!isDirty) {
+        return true;
+      }
+    }
+
     setIsSaving(true);
-    try {
-      if (formState.uiLanguage !== globalSettings.uiLanguage) {
-        await i18n.changeLanguage(formState.uiLanguage);
-      }
+    const saveRequest = (async () => {
+      try {
+        if (formState.uiLanguage !== globalSettings.uiLanguage) {
+          await i18n.changeLanguage(formState.uiLanguage);
+        }
 
-      await save();
-      await invalidateModelCaches();
-
-      if (networkSettingsChanged) {
-        toast.info(
-          t(
-            'settings.system.networkRestartNotice',
-            'Changes to HTTP server network settings are applied after restarting the app.',
-          ),
-          {
-            action: {
-              label: t('common.restartNow', 'Restart now'),
-              onClick: triggerAppRestart,
-            },
-          },
-        );
+        await save();
+        await invalidateModelCaches();
+        return true;
+      } catch (error) {
+        logger.error('Failed to save settings', error);
+        toast.error(t('settings.saveFailed', 'Failed to save settings'));
+        return false;
+      } finally {
+        setIsSaving(false);
       }
-      toast.success(t('settings.saved', 'Settings saved successfully'));
-      return true;
-    } catch (error) {
-      logger.error('Failed to save settings', error);
-      toast.error(t('settings.saveFailed', 'Failed to save settings'));
-      return false;
-    } finally {
-      setIsSaving(false);
+    })();
+    saveInFlightRef.current = saveRequest;
+    const didSave = await saveRequest;
+    if (saveInFlightRef.current === saveRequest) {
+      saveInFlightRef.current = null;
     }
-  }, [
-    formState.uiLanguage,
-    globalSettings.uiLanguage,
-    isDirty,
-    networkSettingsChanged,
-    save,
-    t,
-    triggerAppRestart,
-  ]);
+    return didSave;
+  }, [formState.uiLanguage, globalSettings.uiLanguage, isDirty, save, t]);
 
-  const handleDiscard = useCallback(() => {
-    reset();
-    setIsDiscardDialogOpen(false);
-  }, [reset]);
+  useEffect(() => {
+    flushPendingSaveRef.current = handleSave;
+  }, [handleSave]);
 
-  const handleClose = useCallback(() => {
-    if (isDirty) {
-      setIsLeaveDialogOpen(true);
+  useEffect(
+    () => () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+        autoSaveTimerRef.current = null;
+        void flushPendingSaveRef.current();
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!isDirty) {
       return;
     }
 
-    navigate(-1);
-  }, [isDirty, navigate]);
-
-  const handleSaveAndLeave = useCallback(async () => {
-    const didSave = await handleSave();
-    if (!didSave) {
-      return;
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
     }
+    autoSaveTimerRef.current = setTimeout(() => {
+      autoSaveTimerRef.current = null;
+      void handleSave();
+    }, 400);
 
-    setIsLeaveDialogOpen(false);
-    navigate(-1);
-  }, [handleSave, navigate]);
-
-  const handleDiscardAndLeave = useCallback(() => {
-    reset();
-    setIsLeaveDialogOpen(false);
-    navigate(-1);
-  }, [navigate, reset]);
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+        autoSaveTimerRef.current = null;
+      }
+    };
+  }, [handleSave, isDirty]);
 
   const handleTabChange = useCallback(
     (value: string) => {
@@ -431,29 +406,21 @@ export function useSettingsPageController() {
     changedSectionCount,
     dangerZoneProps,
     formState,
-    handleClose,
     handleContextStrategyChange,
     handleCustomProvidersChange,
-    handleDiscard,
-    handleDiscardAndLeave,
     handleFallbackModelChange,
     handleLanguageChange,
     handleMaxInputContextChange,
     handlePendingChange,
     handlePreferredModelChange,
     handleSave,
-    handleSaveAndLeave,
     handleTabChange,
     handleToolCallGroupVisibleCountChange,
     handleWindowSizeChange,
     isDeleting,
     isDirty,
-    isDiscardDialogOpen,
-    isLeaveDialogOpen,
     isSaving,
     networkSettingsChanged,
-    setIsDiscardDialogOpen,
-    setIsLeaveDialogOpen,
     systemSettingsProps,
     tabNavigationItems,
     updateAdvanced,

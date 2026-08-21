@@ -12,9 +12,19 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui';
-import { Eye, EyeOff, Trash2 } from 'lucide-react';
+import {
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  Loader2,
+  RefreshCw,
+  Trash2,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { normalizeManualModels } from '@/lib/ai-service/custom-providers';
+import { probeCustomOpenAIProvider } from '@/lib/ai-service/custom-provider-probe';
+import { MOARK_PROVIDER_ID } from '@/lib/services/settings-service';
 
 export interface CustomProviderCardProps {
   provider: CustomOpenAIProvider;
@@ -40,14 +50,52 @@ function CustomProviderCardBase({
   onRemove,
 }: CustomProviderCardProps) {
   const [showApiKey, setShowApiKey] = useState(false);
+  const [isProbing, setIsProbing] = useState(false);
+  const [detectedModelCount, setDetectedModelCount] = useState<number | null>(
+    null,
+  );
   const { t } = useTranslation('common');
+  const isMoark = provider.id === MOARK_PROVIDER_ID;
+
+  const handleProbe = async () => {
+    setIsProbing(true);
+    setDetectedModelCount(null);
+    try {
+      const modelIds = await probeCustomOpenAIProvider(
+        provider.baseUrl,
+        provider.apiKey,
+      );
+      setDetectedModelCount(modelIds.length);
+      toast.success(
+        t('settings.customProviders.detectSuccess', {
+          count: modelIds.length,
+          defaultValue: 'Connected. Detected {{count}} models.',
+        }),
+      );
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      toast.error(
+        t('settings.customProviders.detectFailed', {
+          detail,
+          defaultValue: 'Connection failed: {{detail}}',
+        }),
+      );
+    } finally {
+      setIsProbing(false);
+    }
+  };
 
   return (
     <Card className="bg-background border shadow-sm min-w-0 w-full">
       <CardHeader className="pb-4 flex flex-row items-start justify-between gap-2 space-y-0">
         <div className="min-w-0 flex-1 space-y-2">
           <CardTitle className="text-foreground text-base font-medium">
-            {t('settings.customProviders.cardTitle', 'Custom OpenAI Provider')}
+            {isMoark
+              ? t('settings.customProviders.moarkTitle', 'Moark API')
+              : t(
+                  'settings.customProviders.cardTitle',
+                  'Custom OpenAI Provider',
+                )}
           </CardTitle>
           <Input
             type="text"
@@ -93,18 +141,29 @@ function CustomProviderCardBase({
 
         <div className="min-w-0">
           <label className="block text-muted-foreground mb-2 text-sm font-medium">
-            {t('settings.provider.apiKey', 'API Key')}{' '}
-            <span className="font-normal">
-              ({t('settings.customProviders.optional', 'optional')})
-            </span>
+            {isMoark
+              ? t('settings.customProviders.accessToken', 'Access Token')
+              : t('settings.provider.apiKey', 'API Key')}{' '}
+            {!isMoark && (
+              <span className="font-normal">
+                ({t('settings.customProviders.optional', 'optional')})
+              </span>
+            )}
           </label>
           <div className="relative">
             <Input
               type={showApiKey ? 'text' : 'password'}
-              placeholder={t(
-                'settings.customProviders.apiKeyPlaceholder',
-                'Leave empty for local servers',
-              )}
+              placeholder={
+                isMoark
+                  ? t(
+                      'settings.customProviders.moarkTokenPlaceholder',
+                      'Enter Moark Token',
+                    )
+                  : t(
+                      'settings.customProviders.apiKeyPlaceholder',
+                      'Leave empty for local servers',
+                    )
+              }
               value={provider.apiKey || ''}
               onChange={(e) =>
                 onChange(provider.id, { apiKey: e.target.value })
@@ -140,38 +199,65 @@ function CustomProviderCardBase({
               </TooltipContent>
             </Tooltip>
           </div>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => void handleProbe()}
+              disabled={isProbing || !provider.baseUrl.trim()}
+              className="gap-1.5"
+            >
+              {isProbing ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <RefreshCw className="h-3.5 w-3.5" />
+              )}
+              {isProbing
+                ? t('settings.customProviders.detecting', 'Detecting...')
+                : t(
+                    'settings.customProviders.detect',
+                    'Test and detect models',
+                  )}
+            </Button>
+            {detectedModelCount !== null ? (
+              <span className="inline-flex items-center gap-1 text-xs text-success">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                {t('settings.customProviders.detectedModels', {
+                  count: detectedModelCount,
+                  defaultValue: '{{count}} models detected',
+                })}
+              </span>
+            ) : null}
+          </div>
         </div>
 
-        <div className="min-w-0">
-          <label className="block text-muted-foreground mb-2 text-sm font-medium">
-            {t('settings.customProviders.models', 'Models')}{' '}
-            <span className="font-normal">
-              (
-              {t(
-                'settings.customProviders.modelsOptional',
-                'optional manual list',
-              )}
-              )
-            </span>
-          </label>
+        <details className="min-w-0 rounded-md border border-border/60 p-3">
+          <summary className="cursor-pointer text-sm font-medium text-muted-foreground">
+            {t(
+              'settings.customProviders.manualModelsSummary',
+              'Endpoint cannot list models? Add model IDs manually',
+            )}
+          </summary>
           <Textarea
+            aria-label={t('settings.customProviders.models', 'Models')}
             placeholder={t(
               'settings.customProviders.modelsPlaceholder',
-              'One model ID per line (or comma-separated).\nLeave empty to use /v1/models.',
+              'One model ID per line or comma-separated',
             )}
             value={modelsToText(provider.models)}
             onChange={(e) =>
               onChange(provider.id, { models: textToModels(e.target.value) })
             }
-            className="bg-background border text-foreground w-full min-h-[72px]"
+            className="mt-3 min-h-[72px] w-full border bg-background text-foreground"
           />
           <p className="text-xs text-muted-foreground mt-1">
             {t(
               'settings.customProviders.modelsDescription',
-              'Used when the endpoint cannot list models. Otherwise models are fetched from /v1/models after save.',
+              'Only use this fallback when the endpoint does not implement /v1/models.',
             )}
           </p>
-        </div>
+        </details>
       </CardContent>
     </Card>
   );

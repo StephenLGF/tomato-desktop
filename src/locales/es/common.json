@@ -125,7 +125,12 @@
     "reload": "Recargar aplicación"
   },
   "theme": {
-    "toggle": "Cambiar tema"
+    "toggle": "Cambiar tema",
+    "label": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Seguir el sistema",
+    "description": "Se aplica de inmediato y se conserva para futuros inicios."
   },
   "notifications": {
     "open": "Abrir notificaciones",
@@ -422,6 +427,32 @@
           "description": ""
         }
       }
+    },
+    "customProviders": {
+      "title": "Proveedores OpenAI personalizados",
+      "description": "Registra endpoints compatibles con OpenAI y úsalos en el selector de modelos.",
+      "add": "Añadir proveedor",
+      "empty": "No hay proveedores personalizados.",
+      "cardTitle": "Proveedor OpenAI personalizado",
+      "moarkTitle": "API de Moark",
+      "name": "Nombre visible",
+      "namePlaceholder": "p. ej., Local LM Studio, vLLM",
+      "remove": "Eliminar proveedor",
+      "removeConfirm": "¿Eliminar este proveedor?",
+      "baseUrlPlaceholder": "http://192.168.1.100:8000/v1",
+      "optional": "opcional",
+      "apiKeyPlaceholder": "Vacío para servidores locales",
+      "accessToken": "Token de acceso",
+      "moarkTokenPlaceholder": "Introduce el token de Moark",
+      "detect": "Probar conexión y modelos",
+      "detecting": "Detectando...",
+      "detectSuccess": "Conectado. {{count}} modelos detectados.",
+      "detectFailed": "Error de conexión: {{detail}}",
+      "detectedModels": "{{count}} modelos detectados",
+      "manualModelsSummary": "¿No se pueden listar modelos? Añade IDs manualmente",
+      "models": "Modelos",
+      "modelsPlaceholder": "Un ID por línea o separado por comas",
+      "modelsDescription": "Úsalo solo si /v1/models no está implementado."
     },
     "provider": {
       "apiKey": "Clave API",
@@ -1043,6 +1074,8 @@
     "modelPicker": {
       "provider": "Proveedor",
       "model": "Modelo",
+      "searchModels": "Buscar modelos...",
+      "noModelsFound": "No hay modelos coincidentes",
       "loading": "Cargando...",
       "refreshModels": "Actualizar modelos",
       "refreshRequiresApiKey": "Agrega una clave API para habilitar la actualización de modelos"

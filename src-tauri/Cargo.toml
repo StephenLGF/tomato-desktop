@@ -1,10 +1,9 @@
 [package]
-name = "libragent"
+name = "moark-desktop"
 version = "0.9.5"
-description = "A desktop app for AI agents with built-in tools"
-authors = ["fritzprix"]
+description = "Moark desktop agent client with Skills and MCP"
+authors = ["Moark"]
 license = "MIT"
-repository = "https://github.com/fritzprix/libr-agent.git"
 edition = "2021"
 keywords = ["ai", "agent", "multi-agent", "orchestration", "mcp", "model-context-protocol", "react", "desktop", "shareable-config"]
 

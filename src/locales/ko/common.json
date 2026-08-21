@@ -125,7 +125,12 @@
     "reload": "애플리케이션 다시 로드"
   },
   "theme": {
-    "toggle": "테마 전환"
+    "toggle": "테마 전환",
+    "label": "테마",
+    "light": "라이트",
+    "dark": "다크",
+    "system": "시스템 설정",
+    "description": "즉시 적용되며 다음 실행에도 유지됩니다."
   },
   "notifications": {
     "open": "알림 열기",
@@ -426,6 +431,32 @@
           "description": ""
         }
       }
+    },
+    "customProviders": {
+      "title": "사용자 지정 OpenAI 공급자",
+      "description": "OpenAI 호환 엔드포인트를 등록하고 모델 선택기에서 사용합니다.",
+      "add": "사용자 지정 공급자 추가",
+      "empty": "사용자 지정 공급자가 없습니다.",
+      "cardTitle": "사용자 지정 OpenAI 공급자",
+      "moarkTitle": "Moark API",
+      "name": "표시 이름",
+      "namePlaceholder": "예: Local LM Studio, vLLM",
+      "remove": "사용자 지정 공급자 제거",
+      "removeConfirm": "이 공급자를 제거하시겠습니까?",
+      "baseUrlPlaceholder": "http://192.168.1.100:8000/v1",
+      "optional": "선택 사항",
+      "apiKeyPlaceholder": "로컬 서버는 비워 둘 수 있음",
+      "accessToken": "액세스 토큰",
+      "moarkTokenPlaceholder": "Moark Token 입력",
+      "detect": "연결 및 모델 감지",
+      "detecting": "감지 중...",
+      "detectSuccess": "연결됨. 모델 {{count}}개를 감지했습니다.",
+      "detectFailed": "연결 실패: {{detail}}",
+      "detectedModels": "모델 {{count}}개 감지됨",
+      "manualModelsSummary": "모델 목록을 가져올 수 없나요? 모델 ID 수동 추가",
+      "models": "모델",
+      "modelsPlaceholder": "한 줄에 하나 또는 쉼표로 구분",
+      "modelsDescription": "/v1/models를 구현하지 않은 경우에만 사용하세요."
     },
     "provider": {
       "apiKey": "API 키",
@@ -1092,6 +1123,8 @@
     "modelPicker": {
       "provider": "제공자",
       "model": "모델",
+      "searchModels": "모델 검색...",
+      "noModelsFound": "일치하는 모델 없음",
       "loading": "로딩 중...",
       "refreshModels": "모델 새로고침",
       "refreshRequiresApiKey": "모델 새로고침을 사용하려면 API 키를 추가하세요"

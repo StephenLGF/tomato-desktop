@@ -2,14 +2,7 @@ import type { FC } from 'react';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
-  Button,
   Badge,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   Tabs,
   TabsContent,
   TabsList,
@@ -37,28 +30,19 @@ const SettingsPage: FC = function SettingsPage() {
     activeTab,
     changedSectionCount,
     dangerZoneProps,
-    handleClose,
     handleContextStrategyChange,
     handleCustomProvidersChange,
-    handleDiscard,
-    handleDiscardAndLeave,
     handleFallbackModelChange,
     handleLanguageChange,
     handleMaxInputContextChange,
     handlePendingChange,
     handlePreferredModelChange,
-    handleSave,
-    handleSaveAndLeave,
     handleTabChange,
     handleToolCallGroupVisibleCountChange,
     handleWindowSizeChange,
     isDirty,
-    isDiscardDialogOpen,
-    isLeaveDialogOpen,
     isSaving,
     networkSettingsChanged,
-    setIsDiscardDialogOpen,
-    setIsLeaveDialogOpen,
     systemSettingsProps,
     tabNavigationItems,
     updateExperimental,
@@ -80,22 +64,27 @@ const SettingsPage: FC = function SettingsPage() {
               <p className="text-sm text-muted-foreground mt-0.5">
                 {t('settings.versionLabel', {
                   defaultValue: '{{appName}} v{{version}}',
-                  appName: t('appName', 'LibrAgent'),
+                  appName: t('appName', 'Moark Desktop'),
                   version: __APP_VERSION__,
                 })}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 flex-wrap justify-end">
-            {isDirty && (
+            {(isDirty || isSaving) && (
               <Badge
                 variant="outline"
-                className="border-warning/30 bg-warning/10 text-warning-foreground"
+                className="border-primary/30 bg-primary/10 text-foreground"
               >
-                {t('settings.pendingChanges', {
-                  count: changedSectionCount,
-                  defaultValue: '{{count}} sections changed',
-                })}
+                {isSaving && (
+                  <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                )}
+                {isSaving
+                  ? t('settings.saving', 'Saving...')
+                  : t('settings.pendingAutoSave', {
+                      count: changedSectionCount,
+                      defaultValue: 'Applying {{count}} changes...',
+                    })}
               </Badge>
             )}
             {networkSettingsChanged && (
@@ -105,36 +94,10 @@ const SettingsPage: FC = function SettingsPage() {
               >
                 {t(
                   'settings.system.restartRequired',
-                  'Restart required after save',
+                  'Restart required for network settings',
                 )}
               </Badge>
             )}
-            <Button
-              onClick={() => setIsDiscardDialogOpen(true)}
-              variant="outline"
-              className="h-9"
-              disabled={!isDirty || isSaving}
-            >
-              {t('settings.discardChanges', 'Discard')}
-            </Button>
-            <Button
-              onClick={handleClose}
-              variant="ghost"
-              className="h-9"
-              disabled={isSaving}
-            >
-              {t('common.close', 'Close')}
-            </Button>
-            <Button
-              onClick={handleSave}
-              disabled={!isDirty || isSaving}
-              className="h-9 font-medium"
-            >
-              {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isSaving
-                ? t('settings.saving', 'Saving...')
-                : t('settings.saveChanges', 'Save Changes')}
-            </Button>
           </div>
         </div>
 
@@ -240,74 +203,6 @@ const SettingsPage: FC = function SettingsPage() {
           </Tabs>
         </div>
       </div>
-
-      <Dialog open={isDiscardDialogOpen} onOpenChange={setIsDiscardDialogOpen}>
-        <DialogContent showCloseButton={!isSaving}>
-          <DialogHeader>
-            <DialogTitle>
-              {t('settings.discardTitle', 'Discard unsaved changes?')}
-            </DialogTitle>
-            <DialogDescription>
-              {t(
-                'settings.discardDescription',
-                'This will revert every pending change on this page back to the last saved state.',
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsDiscardDialogOpen(false)}
-              disabled={isSaving}
-            >
-              {t('common.cancel', 'Cancel')}
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDiscard}
-              disabled={isSaving}
-            >
-              {t('settings.discardChanges', 'Discard')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isLeaveDialogOpen} onOpenChange={setIsLeaveDialogOpen}>
-        <DialogContent showCloseButton={!isSaving}>
-          <DialogHeader>
-            <DialogTitle>
-              {t('settings.leaveTitle', 'Leave without saving?')}
-            </DialogTitle>
-            <DialogDescription>
-              {t(
-                'settings.leaveDescription',
-                'You have unsaved changes. Save them before leaving, or discard them and leave this page.',
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsLeaveDialogOpen(false)}
-              disabled={isSaving}
-            >
-              {t('common.cancel', 'Cancel')}
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDiscardAndLeave}
-              disabled={isSaving}
-            >
-              {t('settings.discardAndLeave', 'Discard and Leave')}
-            </Button>
-            <Button onClick={handleSaveAndLeave} disabled={isSaving}>
-              {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t('settings.saveAndLeave', 'Save and Leave')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

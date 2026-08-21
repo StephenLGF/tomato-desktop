@@ -1,5 +1,4 @@
 import { AIServiceProvider } from '@/lib/ai-service';
-import { llmConfigManager } from '@/lib/llm-config-manager';
 import {
   REPEATED_THINKING_MIN_PATTERN_LENGTH,
   REPEATED_THINKING_MIN_REPETITIONS,
@@ -31,6 +30,9 @@ export interface CustomOpenAIProvider {
   /** Optional manual model IDs when /v1/models is unavailable. */
   models?: string[];
 }
+
+export const MOARK_PROVIDER_ID = 'moark';
+export const MOARK_PROVIDER_BASE_URL = 'https://api.moark.com/v1';
 
 export interface ModelChoice {
   /** Builtin AIServiceProvider id or `custom:<id>` for custom providers. */
@@ -124,8 +126,6 @@ export interface Settings {
   experimental: ExperimentalSettings;
 }
 
-const DEFAULT_MODEL = llmConfigManager.recommendModel({});
-
 export const DEFAULT_SETTING: Settings = {
   serviceConfigs: Object.values(AIServiceProvider).reduce(
     (acc, provider) => {
@@ -134,10 +134,16 @@ export const DEFAULT_SETTING: Settings = {
     },
     {} as Record<AIServiceProvider, ServiceConfig>,
   ),
-  customProviders: [],
+  customProviders: [
+    {
+      id: MOARK_PROVIDER_ID,
+      name: 'Moark',
+      baseUrl: MOARK_PROVIDER_BASE_URL,
+    },
+  ],
   preferredModel: {
-    provider: DEFAULT_MODEL?.providerId || 'openai',
-    model: DEFAULT_MODEL?.modelId || '',
+    provider: 'custom:moark',
+    model: '',
   },
   fallbackModel: undefined,
   temperatureOverrideEnabled: false,

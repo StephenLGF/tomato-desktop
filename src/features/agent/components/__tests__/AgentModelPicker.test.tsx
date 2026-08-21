@@ -10,7 +10,7 @@ const mockUseAgentModelsState = vi.hoisted(() => ({
     'model-1': {
       name: 'Model 1',
     },
-  },
+  } as Record<string, { name: string }>,
   isRefreshing: false,
   refreshModels: vi.fn().mockResolvedValue(undefined),
   canRefresh: true,
@@ -75,7 +75,18 @@ vi.mock('@/components/ui/select', () => ({
       ) : null}
     </div>
   ),
-  SelectContent: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+  SelectContent: ({
+    children,
+    header,
+  }: {
+    children: ReactNode;
+    header?: ReactNode;
+  }) => (
+    <div>
+      {header}
+      {children}
+    </div>
+  ),
   SelectItem: ({
     children,
     value,
@@ -132,6 +143,26 @@ describe('AgentModelPicker', () => {
 
     expect(mockUseAgentModelsState.refreshModels).toHaveBeenCalledTimes(1);
     expect(refreshButton).toBeEnabled();
+  });
+
+  it('filters model options by model name or id', () => {
+    mockUseAgentModelsState.availableModels = {
+      'model-1': { name: 'Model 1' },
+      'special-model': { name: 'Second Choice' },
+    };
+
+    render(
+      <AgentModelPicker currentModel="model-1" currentProvider="ollama" />,
+    );
+
+    const search = screen.getByRole('searchbox', { name: 'Search models...' });
+    fireEvent.change(search, { target: { value: 'second' } });
+
+    expect(screen.queryByText('Model 1')).not.toBeInTheDocument();
+    expect(screen.getByText('Second Choice')).toBeVisible();
+
+    fireEvent.change(search, { target: { value: 'special-model' } });
+    expect(screen.getByText('Second Choice')).toBeVisible();
   });
 
   it('keeps the refresh button visible but disabled when an API key is required', () => {

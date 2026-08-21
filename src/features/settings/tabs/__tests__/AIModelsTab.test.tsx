@@ -194,6 +194,9 @@ describe('AIModelsTab', () => {
       />,
     );
 
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Provider API Keys' }),
+    );
     const input = screen.getByDisplayValue('http://127.0.0.1:11434');
     fireEvent.change(input, {
       target: { value: 'http://remote-host:11434' },

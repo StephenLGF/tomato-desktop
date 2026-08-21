@@ -124,7 +124,12 @@
     "reload": "アプリケーションを再読み込み"
   },
   "theme": {
-    "toggle": "テーマを切り替え"
+    "toggle": "テーマを切り替え",
+    "label": "テーマ",
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システムに従う",
+    "description": "すぐに適用され、次回起動時も保持されます。"
   },
   "notifications": {
     "open": "通知を開く",
@@ -397,6 +402,32 @@
           "description": ""
         }
       }
+    },
+    "customProviders": {
+      "title": "カスタム OpenAI プロバイダー",
+      "description": "OpenAI 互換エンドポイントを登録してモデル選択で使用します。",
+      "add": "カスタムプロバイダーを追加",
+      "empty": "カスタムプロバイダーはありません。",
+      "cardTitle": "カスタム OpenAI プロバイダー",
+      "moarkTitle": "Moark API",
+      "name": "表示名",
+      "namePlaceholder": "例：Local LM Studio、vLLM",
+      "remove": "カスタムプロバイダーを削除",
+      "removeConfirm": "このプロバイダーを削除しますか？",
+      "baseUrlPlaceholder": "http://192.168.1.100:8000/v1",
+      "optional": "任意",
+      "apiKeyPlaceholder": "ローカルサーバーでは空欄可",
+      "accessToken": "アクセストークン",
+      "moarkTokenPlaceholder": "Moark Token を入力",
+      "detect": "接続とモデルを検出",
+      "detecting": "検出中...",
+      "detectSuccess": "接続成功。{{count}} 件のモデルを検出しました。",
+      "detectFailed": "接続失敗：{{detail}}",
+      "detectedModels": "{{count}} 件のモデルを検出",
+      "manualModelsSummary": "モデル一覧を取得できませんか？モデル ID を手動追加",
+      "models": "モデル",
+      "modelsPlaceholder": "1 行に 1 つ、またはカンマ区切り",
+      "modelsDescription": "/v1/models が未実装の場合のみ使用してください。"
     },
     "provider": {
       "apiKey": "APIキー",
@@ -1017,6 +1048,8 @@
     "modelPicker": {
       "provider": "プロバイダー",
       "model": "モデル",
+      "searchModels": "モデルを検索...",
+      "noModelsFound": "一致するモデルがありません",
       "loading": "読み込み中...",
       "refreshModels": "モデルを更新",
       "refreshRequiresApiKey": "モデルの更新を有効にするには API キーを追加してください"

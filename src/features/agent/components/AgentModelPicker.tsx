@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useDeferredValue, useMemo, useState } from 'react';
 import React from 'react';
 import { RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +25,7 @@ import { llmConfigManager } from '@/lib/llm-config-manager';
 import { cn } from '@/lib/utils';
 import { useSettings } from '@/hooks/use-settings';
 import { useAgentModels } from '../hooks/useAgentModels';
+import { Input } from '@/components/ui/input';
 
 interface AgentModelPickerProps {
   currentModel?: string;
@@ -48,6 +49,8 @@ const AgentModelPickerComponent: FC<AgentModelPickerProps> = ({
   customProviders: customProvidersProp,
 }) => {
   const { t } = useTranslation('common');
+  const [modelSearch, setModelSearch] = useState('');
+  const deferredModelSearch = useDeferredValue(modelSearch);
   const {
     value: {
       customProviders: settingsCustomProviders,
@@ -71,6 +74,16 @@ const AgentModelPickerComponent: FC<AgentModelPickerProps> = ({
       value: key,
     }));
   }, [availableModels]);
+
+  const filteredModelOptions = useMemo(() => {
+    const query = deferredModelSearch.trim().toLocaleLowerCase();
+    if (!query) return modelOptions;
+    return modelOptions.filter(
+      (option) =>
+        option.label.toLocaleLowerCase().includes(query) ||
+        option.value.toLocaleLowerCase().includes(query),
+    );
+  }, [deferredModelSearch, modelOptions]);
 
   const providerOptions = useMemo(() => {
     const providers = llmConfigManager.getProviders();
@@ -190,6 +203,9 @@ const AgentModelPickerComponent: FC<AgentModelPickerProps> = ({
         // placeholder shows without wiping sibling controlled selects.
         value={currentModel || undefined}
         onValueChange={handleModelChange}
+        onOpenChange={(open) => {
+          if (!open) setModelSearch('');
+        }}
         disabled={disabled || isRefreshing || !currentProvider}
       >
         <SelectTrigger className="h-6 min-w-0 flex-1 border-none bg-transparent px-1 text-xs shadow-none gap-1 focus:ring-0 sm:w-[10.5rem] sm:flex-none [&>span]:truncate">
@@ -201,12 +217,38 @@ const AgentModelPickerComponent: FC<AgentModelPickerProps> = ({
             }
           />
         </SelectTrigger>
-        <SelectContent>
-          {modelOptions.map((opt) => (
+        <SelectContent
+          header={
+            <div className="shrink-0 border-b bg-popover p-2">
+              <Input
+                type="search"
+                value={modelSearch}
+                onChange={(event) => setModelSearch(event.target.value)}
+                onKeyDown={(event) => event.stopPropagation()}
+                placeholder={t(
+                  'agent.modelPicker.searchModels',
+                  'Search models...',
+                )}
+                aria-label={t(
+                  'agent.modelPicker.searchModels',
+                  'Search models...',
+                )}
+                className="h-8"
+                autoComplete="off"
+              />
+            </div>
+          }
+        >
+          {filteredModelOptions.map((opt) => (
             <SelectItem key={opt.value} value={opt.value}>
               {opt.label}
             </SelectItem>
           ))}
+          {filteredModelOptions.length === 0 ? (
+            <p className="px-2 py-3 text-center text-xs text-muted-foreground">
+              {t('agent.modelPicker.noModelsFound', 'No matching models')}
+            </p>
+          ) : null}
         </SelectContent>
       </Select>
 

@@ -125,7 +125,12 @@
     "reload": "Recharger l'application"
   },
   "theme": {
-    "toggle": "Changer le thème"
+    "toggle": "Changer le thème",
+    "label": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Suivre le système",
+    "description": "Appliqué immédiatement et conservé pour les prochains lancements."
   },
   "notifications": {
     "open": "Ouvrir les notifications",
@@ -422,6 +427,32 @@
           "description": ""
         }
       }
+    },
+    "customProviders": {
+      "title": "Fournisseurs OpenAI personnalisés",
+      "description": "Enregistrez des points de terminaison compatibles OpenAI et utilisez-les dans le sélecteur de modèles.",
+      "add": "Ajouter un fournisseur",
+      "empty": "Aucun fournisseur personnalisé.",
+      "cardTitle": "Fournisseur OpenAI personnalisé",
+      "moarkTitle": "API Moark",
+      "name": "Nom affiché",
+      "namePlaceholder": "ex. Local LM Studio, vLLM",
+      "remove": "Supprimer le fournisseur",
+      "removeConfirm": "Supprimer ce fournisseur ?",
+      "baseUrlPlaceholder": "http://192.168.1.100:8000/v1",
+      "optional": "facultatif",
+      "apiKeyPlaceholder": "Laisser vide pour un serveur local",
+      "accessToken": "Jeton d’accès",
+      "moarkTokenPlaceholder": "Saisir le jeton Moark",
+      "detect": "Tester la connexion et les modèles",
+      "detecting": "Détection...",
+      "detectSuccess": "Connexion réussie. {{count}} modèles détectés.",
+      "detectFailed": "Échec de la connexion : {{detail}}",
+      "detectedModels": "{{count}} modèles détectés",
+      "manualModelsSummary": "Impossible de lister les modèles ? Ajouter les identifiants manuellement",
+      "models": "Modèles",
+      "modelsPlaceholder": "Un identifiant par ligne ou séparé par des virgules",
+      "modelsDescription": "À utiliser uniquement si /v1/models n’est pas implémenté."
     },
     "provider": {
       "apiKey": "Clé API",
@@ -1043,6 +1074,8 @@
     "modelPicker": {
       "provider": "Fournisseur",
       "model": "Modèle",
+      "searchModels": "Rechercher des modèles...",
+      "noModelsFound": "Aucun modèle correspondant",
       "loading": "Chargement...",
       "refreshModels": "Actualiser les modèles",
       "refreshRequiresApiKey": "Ajoutez une clé API pour activer l’actualisation des modèles"

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from 'next-themes';
 import { DisplaySettings } from '@/context/SettingsContext';
 import {
   Label,
@@ -61,6 +62,7 @@ const PREFILL_DISPLAY_FORMAT_OPTIONS = [
 ] as const;
 
 const LANGUAGE_SELECT_ID = 'settings-language';
+const THEME_SELECT_ID = 'settings-theme';
 const FONT_FAMILY_SELECT_ID = 'settings-font-family';
 const TOOL_DETAIL_LEVEL_SELECT_ID = 'settings-tool-detail-level';
 const METRIC_DISPLAY_MODE_SELECT_ID = 'settings-metric-display-mode';
@@ -103,6 +105,7 @@ function GeneralTabComponent({
   onDisplaySettingsChange,
 }: GeneralTabProps) {
   const { t } = useTranslation('common');
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="space-y-6">
@@ -128,6 +131,36 @@ function GeneralTabComponent({
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="min-w-0">
+        <Label
+          htmlFor={THEME_SELECT_ID}
+          className="mb-2 block text-muted-foreground"
+        >
+          {t('theme.label', 'Theme')}
+        </Label>
+        <Select value={theme ?? 'dark'} onValueChange={setTheme}>
+          <SelectTrigger
+            id={THEME_SELECT_ID}
+            className="w-full max-w-xs bg-background"
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="light">{t('theme.light', 'Light')}</SelectItem>
+            <SelectItem value="dark">{t('theme.dark', 'Dark')}</SelectItem>
+            <SelectItem value="system">
+              {t('theme.system', 'Follow system')}
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        <p className="mt-1 text-xs text-muted-foreground">
+          {t(
+            'theme.description',
+            'Applied immediately and remembered for future launches.',
+          )}
+        </p>
       </div>
 
       <div className="border-t pt-6">

@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Info } from 'lucide-react';
+import { ChevronDown, Plus, Info } from 'lucide-react';
 import { AIServiceProvider } from '@/lib/ai-service';
 import {
   createCustomOpenAIProvider,
@@ -20,6 +20,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { ProviderCard } from '../components/ProviderCard';
 import { CustomProviderCard } from '../components/CustomProviderCard';
 import { NumberSettingField } from '../components/NumberSettingField';
@@ -63,6 +68,8 @@ function AIModelsTabComponent({
 }: AIModelsTabProps) {
   const { t } = useTranslation('common');
   const providers = customProviders ?? EMPTY_CUSTOM_PROVIDERS;
+  const [areBuiltinProvidersOpen, setAreBuiltinProvidersOpen] = useState(false);
+  const [areCustomProvidersOpen, setAreCustomProvidersOpen] = useState(false);
   const PROVIDER_META: Record<
     AIServiceProvider,
     { name: string; description: string }
@@ -325,42 +332,79 @@ function AIModelsTabComponent({
         </div>
       </div>
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium text-foreground">
-          {t('settings.aiModels.apiKeys', 'Provider API Keys')}
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {providerEntries.map((provider) => {
-            const cfg = serviceConfigs[provider] || {};
-            const meta = PROVIDER_META[provider];
-            return (
-              <ProviderCard
-                key={provider}
-                provider={provider}
-                providerName={meta?.name ?? provider}
-                description={meta?.description}
-                apiKey={cfg.apiKey || ''}
-                baseUrl={cfg.baseUrl}
-                onPendingChange={onPendingChange}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
+      <Collapsible
+        open={areBuiltinProvidersOpen}
+        onOpenChange={setAreBuiltinProvidersOpen}
+        className="space-y-4"
+      >
+        <CollapsibleTrigger asChild>
+          <button
+            type="button"
+            className="flex w-full items-center justify-between rounded-lg border border-border/60 bg-card px-4 py-3 text-left"
+          >
             <h3 className="text-lg font-medium text-foreground">
-              {t('settings.customProviders.title', 'Custom OpenAI Providers')}
+              {t('settings.aiModels.apiKeys', 'Provider API Keys')}
             </h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              {t(
-                'settings.customProviders.description',
-                'Register OpenAI-compatible endpoints (vLLM, LM Studio, LocalAI, etc.) with a base URL, optional API key, and optional manual model list. Select them in the model picker.',
-              )}
-            </p>
+            <ChevronDown
+              className={`h-4 w-4 text-muted-foreground transition-transform ${
+                areBuiltinProvidersOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {providerEntries.map((provider) => {
+              const cfg = serviceConfigs[provider] || {};
+              const meta = PROVIDER_META[provider];
+              return (
+                <ProviderCard
+                  key={provider}
+                  provider={provider}
+                  providerName={meta?.name ?? provider}
+                  description={meta?.description}
+                  apiKey={cfg.apiKey || ''}
+                  baseUrl={cfg.baseUrl}
+                  onPendingChange={onPendingChange}
+                />
+              );
+            })}
           </div>
+        </CollapsibleContent>
+      </Collapsible>
+
+      <Collapsible
+        open={areCustomProvidersOpen}
+        onOpenChange={setAreCustomProvidersOpen}
+        className="space-y-4"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/60 bg-card px-4 py-3">
+          <CollapsibleTrigger asChild>
+            <button
+              type="button"
+              className="flex min-w-0 flex-1 items-center gap-3 text-left"
+            >
+              <ChevronDown
+                className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${
+                  areCustomProvidersOpen ? 'rotate-180' : ''
+                }`}
+              />
+              <div>
+                <h3 className="text-lg font-medium text-foreground">
+                  {t(
+                    'settings.customProviders.title',
+                    'Custom OpenAI Providers',
+                  )}
+                </h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t(
+                    'settings.customProviders.description',
+                    'Register OpenAI-compatible endpoints and select them in the model picker.',
+                  )}
+                </p>
+              </div>
+            </button>
+          </CollapsibleTrigger>
           <Button
             type="button"
             variant="outline"
@@ -373,26 +417,28 @@ function AIModelsTabComponent({
           </Button>
         </div>
 
-        {providers.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            {t(
-              'settings.customProviders.empty',
-              'No custom providers yet. Add one to connect an extra OpenAI-compatible server.',
-            )}
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {providers.map((provider) => (
-              <CustomProviderCard
-                key={provider.id}
-                provider={provider}
-                onChange={handleCustomProviderChange}
-                onRemove={handleRemoveCustomProvider}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+        <CollapsibleContent>
+          {providers.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              {t(
+                'settings.customProviders.empty',
+                'No custom providers yet. Add one to connect an extra OpenAI-compatible server.',
+              )}
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {providers.map((provider) => (
+                <CustomProviderCard
+                  key={provider.id}
+                  provider={provider}
+                  onChange={handleCustomProviderChange}
+                  onRemove={handleRemoveCustomProvider}
+                />
+              ))}
+            </div>
+          )}
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }

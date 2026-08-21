@@ -125,7 +125,12 @@
     "reload": "Reload Application"
   },
   "theme": {
-    "toggle": "Toggle theme"
+    "toggle": "Toggle theme",
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "Follow system",
+    "description": "Applied immediately and remembered for future launches."
   },
   "notifications": {
     "open": "Open notifications",
@@ -427,6 +432,32 @@
           "description": ""
         }
       }
+    },
+    "customProviders": {
+      "title": "Custom OpenAI Providers",
+      "description": "Register OpenAI-compatible endpoints and select them in the model picker.",
+      "add": "Add Custom OpenAI Provider",
+      "empty": "No custom providers yet. Add one to connect an extra OpenAI-compatible server.",
+      "cardTitle": "Custom OpenAI Provider",
+      "moarkTitle": "Moark API",
+      "name": "Display name",
+      "namePlaceholder": "e.g., Local-LMStudio, vLLM-Server-1",
+      "remove": "Remove custom provider",
+      "removeConfirm": "Remove this custom provider? Sessions using it will need a new model selection.",
+      "baseUrlPlaceholder": "http://192.168.1.100:8000/v1",
+      "optional": "optional",
+      "apiKeyPlaceholder": "Leave empty for local servers",
+      "accessToken": "Access Token",
+      "moarkTokenPlaceholder": "Enter Moark Token",
+      "detect": "Test and detect models",
+      "detecting": "Detecting...",
+      "detectSuccess": "Connected. Detected {{count}} models.",
+      "detectFailed": "Connection failed: {{detail}}",
+      "detectedModels": "{{count}} models detected",
+      "manualModelsSummary": "Endpoint cannot list models? Add model IDs manually",
+      "models": "Models",
+      "modelsPlaceholder": "One model ID per line or comma-separated",
+      "modelsDescription": "Only use this fallback when the endpoint does not implement /v1/models."
     },
     "provider": {
       "apiKey": "API Key",
@@ -1092,6 +1123,8 @@
     "modelPicker": {
       "provider": "Provider",
       "model": "Model",
+      "searchModels": "Search models...",
+      "noModelsFound": "No matching models",
       "loading": "Loading...",
       "refreshModels": "Refresh models",
       "refreshRequiresApiKey": "Add an API key to enable model refresh"

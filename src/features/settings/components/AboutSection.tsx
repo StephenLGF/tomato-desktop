@@ -1,11 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  RefreshCw,
-  CheckCircle,
-  AlertCircle,
-  Loader2,
-  Download,
-} from 'lucide-react';
+import { RefreshCw, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { useUpdateContext } from '@/context/UpdateContext';
 
@@ -15,16 +9,8 @@ import { useUpdateContext } from '@/context/UpdateContext';
  */
 export function AboutSection() {
   const { t } = useTranslation('common');
-  const {
-    status,
-    availableVersion,
-    downloadProgress,
-    error,
-    canInstallUpdate,
-    installHint,
-    checkForUpdate,
-    installUpdate,
-  } = useUpdateContext();
+  const { status, availableVersion, downloadProgress, error, checkForUpdate } =
+    useUpdateContext();
 
   const isChecking = status === 'checking';
   const isDownloading = status === 'downloading' || status === 'installing';
@@ -40,16 +26,11 @@ export function AboutSection() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-foreground">
-              {t('appName', 'LibrAgent')}
+              {t('appName', 'Moark Desktop')}
             </p>
             <p className="text-xs text-muted-foreground">
               {t('settings.about.version', 'Version')} {__APP_VERSION__}
             </p>
-            {!canInstallUpdate && installHint && (
-              <p className="mt-1 max-w-xl text-xs text-muted-foreground">
-                {installHint}
-              </p>
-            )}
           </div>
 
           {/* Status indicator */}
@@ -90,19 +71,8 @@ export function AboutSection() {
         </div>
 
         {/* Action buttons */}
-        <div className="flex gap-2">
-          {status === 'available' ? (
-            <Button
-              size="sm"
-              onClick={() => void installUpdate()}
-              disabled={isDownloading || !canInstallUpdate}
-              className="gap-1.5"
-              title={!canInstallUpdate ? installHint || undefined : undefined}
-            >
-              <Download size={14} />
-              {t('settings.about.installUpdate', 'Install Update')}
-            </Button>
-          ) : (
+        {status !== 'available' && (
+          <div className="flex gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -116,8 +86,8 @@ export function AboutSection() {
               />
               {t('settings.about.checkForUpdates', 'Check for Updates')}
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

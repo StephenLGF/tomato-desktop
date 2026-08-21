@@ -125,7 +125,12 @@
     "reload": "Anwendung neu laden"
   },
   "theme": {
-    "toggle": "Design umschalten"
+    "toggle": "Design umschalten",
+    "label": "Design",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "Systemeinstellung",
+    "description": "Wird sofort angewendet und für künftige Starts gespeichert."
   },
   "notifications": {
     "open": "Benachrichtigungen öffnen",
@@ -422,6 +427,32 @@
           "description": ""
         }
       }
+    },
+    "customProviders": {
+      "title": "Benutzerdefinierte OpenAI-Anbieter",
+      "description": "OpenAI-kompatible Endpunkte registrieren und in der Modellauswahl verwenden.",
+      "add": "Anbieter hinzufügen",
+      "empty": "Noch keine benutzerdefinierten Anbieter.",
+      "cardTitle": "Benutzerdefinierter OpenAI-Anbieter",
+      "moarkTitle": "Moark API",
+      "name": "Anzeigename",
+      "namePlaceholder": "z. B. Local LM Studio, vLLM",
+      "remove": "Anbieter entfernen",
+      "removeConfirm": "Diesen Anbieter entfernen?",
+      "baseUrlPlaceholder": "http://192.168.1.100:8000/v1",
+      "optional": "optional",
+      "apiKeyPlaceholder": "Für lokale Server leer lassen",
+      "accessToken": "Zugriffstoken",
+      "moarkTokenPlaceholder": "Moark-Token eingeben",
+      "detect": "Verbindung und Modelle prüfen",
+      "detecting": "Wird geprüft...",
+      "detectSuccess": "Verbunden. {{count}} Modelle erkannt.",
+      "detectFailed": "Verbindung fehlgeschlagen: {{detail}}",
+      "detectedModels": "{{count}} Modelle erkannt",
+      "manualModelsSummary": "Keine Modellliste verfügbar? Modell-IDs manuell hinzufügen",
+      "models": "Modelle",
+      "modelsPlaceholder": "Eine Modell-ID pro Zeile oder kommagetrennt",
+      "modelsDescription": "Nur verwenden, wenn /v1/models nicht implementiert ist."
     },
     "provider": {
       "apiKey": "API-Schlüssel",
@@ -1043,6 +1074,8 @@
     "modelPicker": {
       "provider": "Anbieter",
       "model": "Modell",
+      "searchModels": "Modelle suchen...",
+      "noModelsFound": "Keine passenden Modelle",
       "loading": "Ladevorgang...",
       "refreshModels": "Modelle aktualisieren",
       "refreshRequiresApiKey": "Fügen Sie einen API-Schlüssel hinzu, um die Modellaktualisierung zu aktivieren"

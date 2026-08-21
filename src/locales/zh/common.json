@@ -125,7 +125,12 @@
     "reload": "重新加载应用"
   },
   "theme": {
-    "toggle": "切换主题"
+    "toggle": "切换主题",
+    "label": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统",
+    "description": "修改后立即生效，并在下次启动时保留。"
   },
   "notifications": {
     "open": "打开通知",
@@ -422,6 +427,32 @@
           "description": ""
         }
       }
+    },
+    "customProviders": {
+      "title": "自定义 OpenAI 供应商",
+      "description": "添加兼容 OpenAI 的服务地址，并在模型选择器中使用。",
+      "add": "添加自定义供应商",
+      "empty": "尚未添加自定义供应商。",
+      "cardTitle": "自定义 OpenAI 供应商",
+      "moarkTitle": "Moark API",
+      "name": "显示名称",
+      "namePlaceholder": "例如：本地 LM Studio、vLLM 服务",
+      "remove": "移除自定义供应商",
+      "removeConfirm": "确定移除此供应商吗？使用它的会话需要重新选择模型。",
+      "baseUrlPlaceholder": "http://192.168.1.100:8000/v1",
+      "optional": "可选",
+      "apiKeyPlaceholder": "本地服务可以留空",
+      "accessToken": "访问 Token",
+      "moarkTokenPlaceholder": "输入 Moark Token",
+      "detect": "检测连接与模型",
+      "detecting": "正在检测……",
+      "detectSuccess": "连接成功，检测到 {{count}} 个模型。",
+      "detectFailed": "连接失败：{{detail}}",
+      "detectedModels": "已检测到 {{count}} 个模型",
+      "manualModelsSummary": "服务不支持模型列表？手动添加模型 ID",
+      "models": "模型",
+      "modelsPlaceholder": "每行填写一个模型 ID，也可以使用逗号分隔",
+      "modelsDescription": "仅当服务没有实现 /v1/models 接口时使用此兜底设置。"
     },
     "provider": {
       "apiKey": "API 密钥",
@@ -1043,6 +1074,8 @@
     "modelPicker": {
       "provider": "提供商",
       "model": "模型",
+      "searchModels": "搜索模型...",
+      "noModelsFound": "没有匹配的模型",
       "loading": "正在加载...",
       "refreshModels": "刷新模型",
       "refreshRequiresApiKey": "添加 API 密钥以启用模型刷新"
