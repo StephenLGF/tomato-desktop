@@ -1314,5 +1314,39 @@
       "relatedEntity": "相关实体"
     },
     "excerpt": "摘录"
+  },
+  "feishuBots": {
+    "title": "飞书机器人",
+    "description": "配置多个飞书机器人，集中管理应用凭证和启用状态。",
+    "add": "添加机器人",
+    "loading": "正在加载机器人配置…",
+    "emptyTitle": "还没有配置飞书机器人",
+    "emptyDescription": "添加一个机器人后，即可在这里随时查看和修改配置。",
+    "enabled": "已启用",
+    "disabled": "已停用",
+    "fields": {
+      "name": "机器人名称",
+      "namePlaceholder": "例如：研发群机器人",
+      "secretPlaceholder": "输入 App Secret",
+      "verificationToken": "Verification Token（可选）",
+      "tokenPlaceholder": "用于事件回调校验",
+      "enabled": "启用机器人",
+      "enabledHint": "关闭后保留配置但不参与连接"
+    },
+    "dialog": {
+      "addTitle": "添加飞书机器人",
+      "editTitle": "编辑飞书机器人",
+      "description": "填写飞书开放平台应用凭证。凭证会保存在本机数据库中。"
+    },
+    "deleteTitle": "删除机器人配置？",
+    "deleteDescription": "确定删除“{{name}}”吗？此操作无法撤销。",
+    "toasts": {
+      "required": "名称、App ID 和 App Secret 不能为空",
+      "saved": "机器人配置已保存",
+      "saveFailed": "保存机器人配置失败",
+      "loadFailed": "加载飞书机器人失败",
+      "deleted": "机器人配置已删除",
+      "deleteFailed": "删除机器人失败"
+    }
   }
 }

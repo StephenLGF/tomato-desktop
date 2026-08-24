@@ -385,6 +385,21 @@ export default function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
+                  isActive={location.pathname === '/feishu-bots'}
+                  tooltip={t('sidebar.feishuBots', '飞书机器人')}
+                >
+                  <Link
+                    to="/feishu-bots"
+                    className="flex w-full items-center gap-2"
+                  >
+                    <MessageSquare className="shrink-0" />
+                    <span>{t('sidebar.feishuBots', '飞书机器人')}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
                   isActive={location.pathname.startsWith('/agent')}
                   tooltip={t('sidebar.chat')}
                 >
@@ -426,9 +441,7 @@ export default function AppSidebar() {
             )}
           </div>
           {projectsSectionOpen && (
-            <SidebarGroupContent
-              className={cn('pr-2', !isCollapsed && 'pl-3')}
-            >
+            <SidebarGroupContent className={cn('pr-2', !isCollapsed && 'pl-3')}>
               <SidebarMenu>
                 {projects.map((project) => {
                   const expanded = expandedProjectPaths.has(project.path);
@@ -703,21 +716,6 @@ export default function AppSidebar() {
                     >
                       <Blocks className="shrink-0" />
                       <span>{t('sidebar.extensions')}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={location.pathname === '/feishu-bots'}
-                    tooltip={t('sidebar.feishuBots', '飞书机器人')}
-                  >
-                    <Link
-                      to="/feishu-bots"
-                      className="flex w-full items-center gap-2"
-                    >
-                      <MessageSquare className="shrink-0" />
-                      <span>{t('sidebar.feishuBots', '飞书机器人')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

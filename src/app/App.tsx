@@ -276,6 +276,14 @@ function App() {
                                     }
                                   />
                                   <Route
+                                    path="/tomato/feishu-bots"
+                                    element={
+                                      <StartupRouteMountMarker routeName="tomato-feishu-bots">
+                                        <FeishuBotsPage />
+                                      </StartupRouteMountMarker>
+                                    }
+                                  />
+                                  <Route
                                     path="/tomato"
                                     element={
                                       <StartupRouteMountMarker routeName="tomato">
