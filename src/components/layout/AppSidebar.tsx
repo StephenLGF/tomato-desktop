@@ -100,7 +100,7 @@ function StatusDot({ status }: { status: string }) {
       />
     );
   }
-  if (status === 'queued') {
+  if (status === 'queued' || status === 'provisioning') {
     return (
       <Circle
         size={8}
@@ -264,7 +264,7 @@ export default function AppSidebar() {
       (session) =>
         session.status === 'busy' ||
         session.status === 'queued' ||
-        session.status === 'error',
+        session.status === 'provisioning',
     );
     const activeSessionIds = new Set(
       activeSessions.map((session) => session.id),
