@@ -161,6 +161,7 @@ export default function AppSidebar() {
   const [editingClaudeTitle, setEditingClaudeTitle] = useState('');
   const [projectsSectionOpen, setProjectsSectionOpen] = useState(true);
   const [resourcesSectionOpen, setResourcesSectionOpen] = useState(true);
+  const [inProgressSectionOpen, setInProgressSectionOpen] = useState(true);
   const [expandedProjectPaths, setExpandedProjectPaths] = useState<Set<string>>(
     () => new Set(),
   );
@@ -242,6 +243,24 @@ export default function AppSidebar() {
     sessions,
     hasMoreSessions,
   );
+
+  const inProgressSessions = useMemo(() => {
+    const activeSessions = sessions.filter(
+      (session) =>
+        session.status === 'busy' ||
+        session.status === 'queued' ||
+        session.status === 'error',
+    );
+    const activeSessionIds = new Set(
+      activeSessions.map((session) => session.id),
+    );
+    const activeClaudeConversations = claudeConversations.filter(
+      (conversation) =>
+        conversation.claudeSessionId &&
+        activeSessionIds.has(conversation.claudeSessionId),
+    );
+    return { activeSessions, activeClaudeConversations };
+  }, [claudeConversations, sessions]);
 
   const recentSessions = useMemo(
     () =>
@@ -373,7 +392,7 @@ export default function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={location.pathname.startsWith('/tomato')}
+                  isActive={location.pathname === '/tomato'}
                   tooltip={t('sidebar.tomatoWorkboard', '番茄工作台')}
                 >
                   <Link to="/tomato" className="flex w-full items-center gap-2">
@@ -385,11 +404,11 @@ export default function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={location.pathname === '/feishu-bots'}
+                  isActive={location.pathname.startsWith('/tomato/feishu-bots')}
                   tooltip={t('sidebar.feishuBots', '飞书机器人')}
                 >
                   <Link
-                    to="/feishu-bots"
+                    to="/tomato/feishu-bots"
                     className="flex w-full items-center gap-2"
                   >
                     <MessageSquare className="shrink-0" />
@@ -412,6 +431,68 @@ export default function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* In Progress */}
+        {inProgressSessions.activeSessions.length > 0 && (
+          <SidebarGroup className="shrink-0">
+            <div className="mb-2 flex h-8 items-center justify-between px-2">
+              <button
+                type="button"
+                className="flex min-w-0 items-center gap-1 text-sm font-semibold uppercase tracking-wide text-sidebar-foreground/70 hover:text-sidebar-foreground"
+                onClick={() => setInProgressSectionOpen((open) => !open)}
+              >
+                {inProgressSectionOpen ? (
+                  <ChevronDown className="size-3.5" />
+                ) : (
+                  <ChevronRight className="size-3.5" />
+                )}
+                <span>进行中</span>
+              </button>
+            </div>
+            {inProgressSectionOpen && (
+              <SidebarGroupContent
+                className={cn('pr-2', !isCollapsed && 'pl-3')}
+              >
+                <SidebarMenu>
+                  {inProgressSessions.activeSessions.map((session) => {
+                    const relatedConversation =
+                      inProgressSessions.activeClaudeConversations.find(
+                        (conversation) =>
+                          conversation.claudeSessionId === session.id,
+                      );
+                    return (
+                      <SidebarMenuItem key={session.id}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={
+                            relatedConversation
+                              ? activeClaudeConversationId ===
+                                relatedConversation.id
+                              : location.pathname === `/agent/${session.id}`
+                          }
+                        >
+                          <Link
+                            to={
+                              relatedConversation
+                                ? claudeConversationPath(relatedConversation)
+                                : `/agent/${session.id}`
+                            }
+                            className="flex items-center gap-2"
+                          >
+                            <StatusDot status={session.status} />
+                            <span className="truncate">
+                              {relatedConversation?.title || session.name}
+                            </span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            )}
+          </SidebarGroup>
+        )}
 
         {/* Projects Section */}
         <SidebarGroup className="shrink-0">
