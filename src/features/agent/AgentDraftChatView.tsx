@@ -13,7 +13,8 @@ import { AgentDraftWorkspacePreviewPanel } from './components/AgentDraftWorkspac
 import { AgentAttachedFilesBar } from './components/AgentAttachedFilesBar';
 import AgentSessionHeader from './components/AgentSessionHeader';
 import { DraftCapabilitiesSection } from './components/DraftCapabilitiesSection';
-import { Send, Loader2, Bot } from 'lucide-react';
+import { AgentModelPicker } from './components/AgentModelPicker';
+import { Send, Loader2, Bot, ChevronUp, ChevronDown } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
 import { EditorProvider } from '@/context/EditorContext';
 import { updateAssistant } from '@/lib/backend/assistants';
@@ -82,6 +83,8 @@ function DraftChatInner() {
     onDismiss,
     dockerError,
     setDockerError,
+    inputHistory,
+    handleHistoryNavigate,
   } = useAgentDraftChat();
 
   const handleAssistantToolsSave = useCallback(
@@ -280,6 +283,22 @@ function DraftChatInner() {
                   />
                 )}
 
+                {/* Model Selector */}
+                <div className="mb-2 flex justify-end">
+                  <AgentModelPicker
+                    currentModel={
+                      overrideModel ?? settings?.preferredModel?.model
+                    }
+                    currentProvider={
+                      overrideProvider ?? settings?.preferredModel?.provider
+                    }
+                    onConfigUpdate={(model, provider) => {
+                      setOverrideModel(model);
+                      setOverrideProvider(provider);
+                    }}
+                  />
+                </div>
+
                 {/* Input Form - Exact match for AgentChatInput formClassName */}
                 <div className="relative group">
                   {stage.kind !== 'idle' &&
@@ -387,6 +406,19 @@ function DraftChatInner() {
                           return;
                         }
 
+                        // Handle history navigation when not in autocomplete mode
+                        if (e.key === 'ArrowUp' && stage.kind === 'idle') {
+                          e.preventDefault();
+                          handleHistoryNavigate('up');
+                          return;
+                        }
+
+                        if (e.key === 'ArrowDown' && stage.kind === 'idle') {
+                          e.preventDefault();
+                          handleHistoryNavigate('down');
+                          return;
+                        }
+
                         if (e.key === 'Enter' && !e.shiftKey) {
                           e.preventDefault();
                           if (
@@ -399,6 +431,57 @@ function DraftChatInner() {
                       }}
                       disabled={isSubmitting || isAttachmentLoading}
                     />
+
+                    {inputHistory.hasHistory && (
+                      <div className="flex flex-col shrink-0 mb-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="h-4 w-8 p-0"
+                              onClick={() => {
+                                handleHistoryNavigate('up');
+                                textareaRef.current?.focus();
+                              }}
+                              aria-label={t(
+                                'agent.input.historyPrevAriaLabel',
+                              )}
+                              title={t('agent.input.historyPrevAriaLabel')}
+                            >
+                              <ChevronUp className="h-3 w-3" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {t('agent.input.historyPrevAriaLabel')}
+                          </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="h-4 w-8 p-0"
+                              onClick={() => {
+                                handleHistoryNavigate('down');
+                                textareaRef.current?.focus();
+                              }}
+                              aria-label={t(
+                                'agent.input.historyNextAriaLabel',
+                              )}
+                              title={t('agent.input.historyNextAriaLabel')}
+                            >
+                              <ChevronDown className="h-3 w-3" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {t('agent.input.historyNextAriaLabel')}
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    )}
 
                     <Tooltip>
                       <TooltipTrigger asChild>

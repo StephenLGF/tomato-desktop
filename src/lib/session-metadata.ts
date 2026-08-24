@@ -44,6 +44,7 @@ export function mapSessionMetadataToAgentSession(
     executionMode,
     pendingApprovalCount,
     workspaceIsolation: metadata.workspaceIsolation,
+    workspaceOverride: metadata.workspaceOverride,
     dockerConfig: metadata.dockerConfig,
   };
 }

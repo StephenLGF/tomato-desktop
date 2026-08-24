@@ -12,7 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui';
-import { Send, Square, Loader2, Play } from 'lucide-react';
+import { Send, Square, Loader2, Play, ChevronUp, ChevronDown } from 'lucide-react';
 import type { AttachmentReference } from '@/models/chat';
 import { getLogger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
@@ -34,6 +34,7 @@ import { useTextareaAutosize } from '@/hooks/useTextareaAutosize';
 import { AGENT_ATTACHMENT_PICKER_ACCEPT } from '../lib/attachment-picker';
 import { useClipboardImage } from '../hooks/useClipboardImage';
 import { LayeredPendingQueue } from './LayeredPendingQueue';
+import { useInputHistory } from '../hooks/useInputHistory';
 
 const logger = getLogger('AgentChatInput');
 
@@ -133,6 +134,8 @@ export function AgentChatInput({ children }: AgentChatInputProps) {
     onClearSession: clearSessionHistory,
     onExecutionModeChange: applyExecutionMode,
   });
+
+  const { navigateUp, navigateDown, reset: resetHistory, hasHistory } = useInputHistory(messages);
 
   const attachedFiles = pendingFiles;
   const hasContent = input.trim().length > 0 || attachedFiles.length > 0;
@@ -244,6 +247,35 @@ export function AgentChatInput({ children }: AgentChatInputProps) {
           return; // InputTokenDropdown's capture listener has priority
         }
       }
+
+      // Handle input history navigation when dropdown is not active
+      if (e.key === 'ArrowUp' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+        const textarea = e.currentTarget;
+        // Only navigate history if cursor is at the beginning or start of first line
+        if (textarea.selectionStart === 0 && textarea.selectionEnd === 0) {
+          e.preventDefault();
+          const historyText = navigateUp(input);
+          if (historyText !== null) {
+            setInput(historyText);
+          }
+          return;
+        }
+      }
+
+      if (e.key === 'ArrowDown' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+        const textarea = e.currentTarget;
+        const atEnd = textarea.selectionStart === input.length;
+        // Only navigate history if cursor is at the end
+        if (atEnd) {
+          e.preventDefault();
+          const historyText = navigateDown(input);
+          if (historyText !== null) {
+            setInput(historyText);
+          }
+          return;
+        }
+      }
+
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         if (
@@ -251,6 +283,7 @@ export function AgentChatInput({ children }: AgentChatInputProps) {
           !isAttachmentLoading &&
           (input.trim() || attachedFiles.length > 0)
         ) {
+          resetHistory(); // Reset history navigation on submit
           chatInputRef.current?.dispatchEvent(
             new Event('submit', { bubbles: true, cancelable: true }),
           );
@@ -268,6 +301,11 @@ export function AgentChatInput({ children }: AgentChatInputProps) {
       toolResults.length,
       fileResults.length,
       playbookResults.length,
+      commandResults.length,
+      navigateUp,
+      navigateDown,
+      resetHistory,
+      setInput,
     ],
   );
 
@@ -461,6 +499,58 @@ export function AgentChatInput({ children }: AgentChatInputProps) {
           rows={1}
           aria-label={t('agent.input.ariaLabel')}
         />
+        {hasHistory && (
+          <div className="flex flex-col shrink-0 mb-1">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-8 p-0"
+                  onClick={() => {
+                    const historyText = navigateUp(input);
+                    if (historyText !== null) {
+                      setInput(historyText);
+                    }
+                    textareaRef.current?.focus();
+                  }}
+                  aria-label={t('agent.input.historyPrevAriaLabel')}
+                  title={t('agent.input.historyPrevAriaLabel')}
+                >
+                  <ChevronUp className="h-3 w-3" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {t('agent.input.historyPrevAriaLabel')}
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-8 p-0"
+                  onClick={() => {
+                    const historyText = navigateDown(input);
+                    if (historyText !== null) {
+                      setInput(historyText);
+                    }
+                    textareaRef.current?.focus();
+                  }}
+                  aria-label={t('agent.input.historyNextAriaLabel')}
+                  title={t('agent.input.historyNextAriaLabel')}
+                >
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {t('agent.input.historyNextAriaLabel')}
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        )}
         {isBusy ? (
           <Tooltip>
             <TooltipTrigger asChild>

@@ -58,6 +58,7 @@ export default function AgentChatStartView() {
   const [searchParams] = useSearchParams();
   const processingPlaybookRef = useRef(false);
   const playbookId = searchParams.get('playbookId');
+  const projectPath = searchParams.get('projectPath');
 
   // Handle Playbook Auto-Start
   useEffect(() => {
@@ -127,9 +128,11 @@ export default function AgentChatStartView() {
   const handleAssistantSelect = useCallback(
     (assistantId: string) => {
       setStartingAssistantId(assistantId);
-      navigate(`/agent/draft?assistantId=${assistantId}`);
+      const params = new URLSearchParams({ assistantId });
+      if (projectPath) params.set('projectPath', projectPath);
+      navigate(`/agent/draft?${params.toString()}`);
     },
-    [navigate],
+    [navigate, projectPath],
   );
 
   const handleStartSelection = useCallback(

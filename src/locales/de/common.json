@@ -161,7 +161,8 @@
     "org": "Organisation",
     "expandSession": "Untersitzungen erweitern",
     "collapseSession": "Untersitzungen einklappen",
-    "loadingSessionChildren": "Untersitzungen werden geladen"
+    "loadingSessionChildren": "Untersitzungen werden geladen",
+    "feishuBots": "Feishu-Bots"
   },
   "sessionHistory": {
     "heading": "Sitzungsverlauf",

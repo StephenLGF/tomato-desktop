@@ -161,7 +161,8 @@
     "org": "조직",
     "expandSession": "하위 세션 펼치기",
     "collapseSession": "하위 세션 접기",
-    "loadingSessionChildren": "하위 세션 불러오는 중"
+    "loadingSessionChildren": "하위 세션 불러오는 중",
+    "feishuBots": "Feishu 봇"
   },
   "sessionHistory": {
     "heading": "세션 기록",

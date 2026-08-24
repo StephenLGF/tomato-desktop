@@ -206,18 +206,20 @@ export class OpenAIService extends BaseAIService<
 
       return models;
     } catch (error) {
+      const fallbackModels = await this.fallbackToStaticModels();
       const failure = reportListModelsFallback({
         provider,
         baseUrl: this.config?.baseUrl ?? this.openai.baseURL,
         reason: 'api_error',
         error,
+        hasFallbackModels: fallbackModels.length > 0,
       });
       logger.warn(
         `Failed to fetch models from ${provider} API, falling back to static config`,
         failure,
         error,
       );
-      return this.fallbackToStaticModels();
+      return fallbackModels;
     }
   }
 

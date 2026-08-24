@@ -13,6 +13,39 @@ pub fn home_dir() -> Option<PathBuf> {
         .map(PathBuf::from)
 }
 
+/// Resolves a CLI executable from the inherited PATH and common user install directories.
+///
+/// Desktop apps launched outside a shell often do not inherit entries such as
+/// `~/.local/bin`, even though the same command is available in Terminal.
+pub fn resolve_cli_executable(command: &str) -> PathBuf {
+    let command_path = PathBuf::from(command);
+    if command_path.components().count() > 1 {
+        return command_path;
+    }
+
+    let mut search_directories = std::env::var_os("PATH")
+        .map(|path| std::env::split_paths(&path).collect::<Vec<_>>())
+        .unwrap_or_default();
+    if let Some(home) = home_dir() {
+        search_directories.extend([
+            home.join(".local/bin"),
+            home.join("bin"),
+            home.join(".cargo/bin"),
+        ]);
+    }
+    #[cfg(target_os = "macos")]
+    search_directories.extend([
+        PathBuf::from("/opt/homebrew/bin"),
+        PathBuf::from("/usr/local/bin"),
+    ]);
+
+    search_directories
+        .into_iter()
+        .map(|directory| directory.join(command))
+        .find(|candidate| candidate.is_file())
+        .unwrap_or(command_path)
+}
+
 /// Discover `etc/profile.d/conda.sh` on Unix-like systems.
 #[cfg(unix)]
 pub fn discover_conda_sh() -> Option<PathBuf> {

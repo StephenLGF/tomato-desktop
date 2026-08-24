@@ -161,7 +161,8 @@
     "org": "Organização",
     "expandSession": "Expandir sessões filhas",
     "collapseSession": "Recolher sessões filhas",
-    "loadingSessionChildren": "Carregando sessões filhas"
+    "loadingSessionChildren": "Carregando sessões filhas",
+    "feishuBots": "Bots do Feishu"
   },
   "sessionHistory": {
     "heading": "Histórico de Sessões",

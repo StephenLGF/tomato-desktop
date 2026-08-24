@@ -11,6 +11,7 @@ export interface ListModelsFailureContext {
   reason: 'api_error' | 'invalid_response';
   error?: unknown;
   hasCachedModels?: boolean;
+  hasFallbackModels?: boolean;
 }
 
 export interface ListModelsFailurePayload {
@@ -20,6 +21,7 @@ export interface ListModelsFailurePayload {
   message: string;
   usedStaticFallback: true;
   hasCachedModels?: boolean;
+  hasFallbackModels?: boolean;
 }
 
 type ListModelsFallbackListener = (payload: ListModelsFailurePayload) => void;
@@ -50,6 +52,7 @@ export function describeListModelsFailure(
     message: errorMessage(context.error),
     usedStaticFallback: true,
     hasCachedModels: context.hasCachedModels,
+    hasFallbackModels: context.hasFallbackModels,
   };
 }
 
@@ -86,7 +89,7 @@ function notifyFallbackListeners(payload: ListModelsFailurePayload): void {
 
 function toastListModelsFallback(payload: ListModelsFailurePayload): void {
   // If persistent cached models are available for this provider, do not alarm the user with error toasts
-  if (payload.hasCachedModels) {
+  if (payload.hasCachedModels || payload.hasFallbackModels) {
     return;
   }
   const key = `${payload.provider}:${payload.message}`;

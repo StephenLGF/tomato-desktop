@@ -33,6 +33,8 @@ export interface AgentSession {
   executionMode: ExecutionMode;
   pendingApprovalCount?: number;
   workspaceIsolation?: WorkspaceIsolationMode;
+  /** Registered project/workspace path this conversation is attached to. */
+  workspaceOverride?: string;
   dockerConfig?: DockerWorkspaceConfig;
   /** Lightweight provisioning step for session list UI */
   provisioningStep?: string;

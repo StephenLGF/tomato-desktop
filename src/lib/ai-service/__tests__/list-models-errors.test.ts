@@ -60,4 +60,16 @@ describe('list-models-errors', () => {
 
     unsubscribe();
   });
+
+  it('does not toast when usable fallback models are available', () => {
+    const payload = reportListModelsFallback({
+      provider: 'openai',
+      reason: 'api_error',
+      error: new Error('401 401'),
+      hasFallbackModels: true,
+    });
+
+    expect(payload.hasFallbackModels).toBe(true);
+    expect(toastError).not.toHaveBeenCalled();
+  });
 });

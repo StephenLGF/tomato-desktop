@@ -3,9 +3,6 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import { lazy, Suspense, useEffect } from 'react';
 import { Toaster } from '../components/ui/sonner';
 import AppSidebar from '../components/layout/AppSidebar';
-import { ThemeToggle } from '../components/common/ThemeToggle';
-import { AppHeader } from '../components/layout/AppHeader';
-import { SessionNotificationsBell } from '../components/layout/SessionNotificationsBell';
 import { SidebarProvider } from '../components/ui/sidebar';
 import { MCPServerProvider } from '../context/MCPServerContext';
 import { MCPServerRegistryProvider } from '../context/MCPServerRegistryContext';
@@ -43,6 +40,18 @@ const MCPServerPage = lazy(
 const KnowledgePage = lazy(() => import('@/features/knowledge/KnowledgePage'));
 const ScheduledTasksPage = lazy(
   () => import('@/features/scheduled-tasks/ScheduledTasksRoute'),
+);
+const TomatoWorkboardRoute = lazy(
+  () => import('@/features/tomato/TomatoWorkboardRoute'),
+);
+const CliCapabilitiesRoute = lazy(
+  () => import('@/features/cli/CliCapabilitiesRoute'),
+);
+const ClaudeCodeRoute = lazy(
+  () => import('@/features/claude-code/ClaudeCodeRoute'),
+);
+const FeishuBotsPage = lazy(
+  () => import('@/features/feishu-bots/FeishuBotsPage'),
 );
 
 function StartupRouteMountMarker({
@@ -125,10 +134,6 @@ function App() {
                           <AppSidebar />
                           {/* Main Content Area (children of AppSidebar) */}
                           <div className="flex flex-1 flex-col min-w-0">
-                            <AppHeader>
-                              <SessionNotificationsBell />
-                              <ThemeToggle />
-                            </AppHeader>
                             <div className="flex-1 w-full min-h-0 overflow-y-auto">
                               <Suspense
                                 fallback={
@@ -140,7 +145,7 @@ function App() {
                                 <Routes>
                                   <Route
                                     path="/"
-                                    element={<Navigate to="/agent" replace />}
+                                    element={<Navigate to="/tomato" replace />}
                                   />
                                   <Route
                                     path="/agent"
@@ -243,6 +248,38 @@ function App() {
                                     element={
                                       <StartupRouteMountMarker routeName="scheduled-tasks">
                                         <ScheduledTasksPage />
+                                      </StartupRouteMountMarker>
+                                    }
+                                  />
+                                  <Route
+                                    path="/cli"
+                                    element={
+                                      <StartupRouteMountMarker routeName="cli">
+                                        <CliCapabilitiesRoute />
+                                      </StartupRouteMountMarker>
+                                    }
+                                  />
+                                  <Route
+                                    path="/claude-code"
+                                    element={
+                                      <StartupRouteMountMarker routeName="claude-code">
+                                        <ClaudeCodeRoute />
+                                      </StartupRouteMountMarker>
+                                    }
+                                  />
+                                  <Route
+                                    path="/feishu-bots"
+                                    element={
+                                      <StartupRouteMountMarker routeName="feishu-bots">
+                                        <FeishuBotsPage />
+                                      </StartupRouteMountMarker>
+                                    }
+                                  />
+                                  <Route
+                                    path="/tomato"
+                                    element={
+                                      <StartupRouteMountMarker routeName="tomato">
+                                        <TomatoWorkboardRoute />
                                       </StartupRouteMountMarker>
                                     }
                                   />

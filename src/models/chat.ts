@@ -353,6 +353,8 @@ export interface Assistant {
    * - Example: ['browser', 'attachments', 'workspace', 'planning', 'playbook']
    */
   allowedBuiltInServiceAliases?: string[];
+  showInSidebar?: boolean;
+  runtime?: 'libragent' | 'claude-code';
   deletionProtected: boolean;
 
   createdAt: Date;

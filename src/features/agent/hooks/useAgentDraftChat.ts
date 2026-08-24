@@ -23,6 +23,7 @@ import {
 import { useRustBackend } from '@/hooks/use-rust-backend';
 import { useInputToken } from './useInputToken';
 import { useScopedSkills } from './useScopedSkills';
+import { useInputHistory } from './useInputHistory';
 import type { AgentEventPayload } from '@/context/AgentSessionContext';
 import {
   addAgentAttachment,
@@ -77,7 +78,7 @@ export function useAgentDraftChat() {
   // Pre-session file attachments
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [workspaceOverride, setWorkspaceOverride] = useState<string | null>(
-    null,
+    () => searchParams.get('projectPath'),
   );
   const [workspaceIsolation, setWorkspaceIsolation] = useState<
     'host' | 'docker'
@@ -114,6 +115,9 @@ export function useAgentDraftChat() {
     onArgSelect,
     onDismiss,
   } = useInputToken(skills);
+
+  // Input history navigation (for draft view, we use empty message list)
+  const inputHistory = useInputHistory([]);
 
   const getMimeType = getMimeTypeFromFilename;
 
@@ -577,6 +581,19 @@ export function useAgentDraftChat() {
     [submitDraft],
   );
 
+  const handleHistoryNavigate = useCallback(
+    (direction: 'up' | 'down') => {
+      const result =
+        direction === 'up'
+          ? inputHistory.navigateUp(input)
+          : inputHistory.navigateDown(input);
+      if (result !== null) {
+        setInput(result);
+      }
+    },
+    [input, inputHistory],
+  );
+
   const retryDraftSubmit = useCallback(async () => {
     await submitDraft();
   }, [submitDraft]);
@@ -621,5 +638,7 @@ export function useAgentDraftChat() {
     onDismiss,
     dockerError,
     setDockerError,
+    inputHistory,
+    handleHistoryNavigate,
   };
 }
