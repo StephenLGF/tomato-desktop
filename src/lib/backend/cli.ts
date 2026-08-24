@@ -50,6 +50,10 @@ export function getActiveClaudeRequestId(
   return activeClaudeRequests.get(conversationId);
 }
 
+export function listActiveClaudeConversationIds(): string[] {
+  return [...activeClaudeRequests.keys()];
+}
+
 export function sendClaudeCodeMessage(request: {
   prompt: string;
   workspacePath: string;

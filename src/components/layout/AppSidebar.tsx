@@ -19,6 +19,7 @@ import {
   ClipboardList,
   TerminalSquare,
   FolderGit2,
+  MessageSquare,
   Plus,
   Pencil,
   Trash2,
@@ -70,6 +71,10 @@ import {
   saveClaudeCodeConversation,
   type ClaudeCodeConversation,
 } from '@/lib/backend/claude-code-conversations';
+import {
+  CLAUDE_RUNTIME_CHANGED_EVENT,
+  listActiveClaudeConversationIds,
+} from '@/lib/backend/cli';
 import { findTomatoCardIdByConversation } from '@/lib/tomato-conversation-links';
 
 const logger = getLogger('AppSidebar');
@@ -161,6 +166,8 @@ export default function AppSidebar() {
   const [projectsSectionOpen, setProjectsSectionOpen] = useState(true);
   const [resourcesSectionOpen, setResourcesSectionOpen] = useState(true);
   const [inProgressSectionOpen, setInProgressSectionOpen] = useState(true);
+  const [activeClaudeConversationIds, setActiveClaudeConversationIds] =
+    useState<string[]>([]);
   const [expandedProjectPaths, setExpandedProjectPaths] = useState<Set<string>>(
     () => new Set(),
   );
@@ -194,6 +201,15 @@ export default function AppSidebar() {
     return () =>
       window.removeEventListener(CLAUDE_CONVERSATIONS_CHANGED_EVENT, refresh);
   }, [loadClaudeConversations]);
+
+  useEffect(() => {
+    const refresh = () =>
+      setActiveClaudeConversationIds(listActiveClaudeConversationIds());
+    refresh();
+    window.addEventListener(CLAUDE_RUNTIME_CHANGED_EVENT, refresh);
+    return () =>
+      window.removeEventListener(CLAUDE_RUNTIME_CHANGED_EVENT, refresh);
+  }, []);
 
   const commitClaudeConversationTitle = useCallback(
     async (conversation: ClaudeCodeConversation) => {
@@ -255,11 +271,21 @@ export default function AppSidebar() {
     );
     const activeClaudeConversations = claudeConversations.filter(
       (conversation) =>
-        conversation.claudeSessionId &&
-        activeSessionIds.has(conversation.claudeSessionId),
+        activeClaudeConversationIds.includes(conversation.id) ||
+        (conversation.claudeSessionId &&
+          activeSessionIds.has(conversation.claudeSessionId)),
     );
-    return { activeSessions, activeClaudeConversations };
-  }, [claudeConversations, sessions]);
+    const standaloneClaudeConversations = activeClaudeConversations.filter(
+      (conversation) =>
+        !conversation.claudeSessionId ||
+        !activeSessionIds.has(conversation.claudeSessionId),
+    );
+    return {
+      activeSessions,
+      activeClaudeConversations,
+      standaloneClaudeConversations,
+    };
+  }, [activeClaudeConversationIds, claudeConversations, sessions]);
 
   const recentSessions = useMemo(
     () =>
@@ -403,6 +429,21 @@ export default function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
+                  isActive={location.pathname === '/feishu-bots'}
+                  tooltip={t('sidebar.feishuBots', '飞书机器人')}
+                >
+                  <Link
+                    to="/feishu-bots"
+                    className="flex w-full items-center gap-2"
+                  >
+                    <MessageSquare className="shrink-0" />
+                    <span>{t('sidebar.feishuBots', '飞书机器人')}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
                   isActive={location.pathname.startsWith('/agent')}
                   tooltip={t('sidebar.chat')}
                 >
@@ -417,7 +458,8 @@ export default function AppSidebar() {
         </SidebarGroup>
 
         {/* In Progress */}
-        {inProgressSessions.activeSessions.length > 0 && (
+        {(inProgressSessions.activeSessions.length > 0 ||
+          inProgressSessions.standaloneClaudeConversations.length > 0) && (
           <SidebarGroup className="shrink-0">
             <div className="mb-2 flex h-8 items-center justify-between px-2">
               <button
@@ -472,6 +514,28 @@ export default function AppSidebar() {
                       </SidebarMenuItem>
                     );
                   })}
+                  {inProgressSessions.standaloneClaudeConversations.map(
+                    (conversation) => (
+                      <SidebarMenuItem key={conversation.id}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={
+                            activeClaudeConversationId === conversation.id
+                          }
+                        >
+                          <Link
+                            to={claudeConversationPath(conversation)}
+                            className="flex items-center gap-2"
+                          >
+                            <StatusDot status="busy" />
+                            <span className="truncate">
+                              {conversation.title}
+                            </span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ),
+                  )}
                 </SidebarMenu>
               </SidebarGroupContent>
             )}
