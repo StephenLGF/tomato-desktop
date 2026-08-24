@@ -1448,5 +1448,39 @@
       "relatedEntity": "Related entity"
     },
     "excerpt": "Excerpt"
+  },
+  "feishuBots": {
+    "title": "Feishu Bots",
+    "description": "Manage multiple Feishu bots, app credentials, and enabled status.",
+    "add": "Add bot",
+    "loading": "Loading bot configurations…",
+    "emptyTitle": "No Feishu bots configured",
+    "emptyDescription": "Add a bot to view and edit its configuration here.",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "fields": {
+      "name": "Bot name",
+      "namePlaceholder": "e.g. Engineering bot",
+      "secretPlaceholder": "Enter App Secret",
+      "verificationToken": "Verification Token (optional)",
+      "tokenPlaceholder": "Used to validate event callbacks",
+      "enabled": "Enable bot",
+      "enabledHint": "Keep the configuration but exclude it from connections when disabled"
+    },
+    "dialog": {
+      "addTitle": "Add Feishu bot",
+      "editTitle": "Edit Feishu bot",
+      "description": "Enter Feishu Open Platform credentials. Credentials are stored in the local database."
+    },
+    "deleteTitle": "Delete bot configuration?",
+    "deleteDescription": "Delete “{{name}}”? This action cannot be undone.",
+    "toasts": {
+      "required": "Name, App ID, and App Secret are required",
+      "saved": "Bot configuration saved",
+      "saveFailed": "Failed to save bot configuration",
+      "loadFailed": "Failed to load Feishu bots",
+      "deleted": "Bot configuration deleted",
+      "deleteFailed": "Failed to delete bot"
+    }
   }
 }
