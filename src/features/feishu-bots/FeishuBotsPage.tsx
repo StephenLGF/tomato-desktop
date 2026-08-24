@@ -375,8 +375,17 @@ export default function FeishuBotsPage() {
                   >
                     <Pencil className="mr-2 size-3.5" />{t('common.edit', '编辑')}
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => setDeletingBot(bot)}>
-                    <Trash2 className="mr-2 size-3.5" />{t('common.delete', '删除')}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive hover:text-destructive"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setDeletingBot(bot);
+                    }}
+                  >
+                    <Trash2 className="mr-2 size-3.5" />
+                    {t('common.delete', '删除')}
                   </Button>
                 </div>
               </article>
