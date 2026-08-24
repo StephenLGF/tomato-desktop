@@ -213,6 +213,17 @@ export function ClaudeCodeInlineChat({
           onStream: (event) => {
             if (event.kind === 'session_id') {
               setSessionId(event.text);
+              void saveClaudeCodeConversation({
+                id: currentConversationId,
+                claudeSessionId: event.text,
+                repositoryPath,
+                contextKey,
+                title: currentTitle,
+                contextText,
+                messages: pendingMessages,
+                createdAt: nextCreatedAt,
+                updatedAt: Date.now(),
+              });
               return;
             }
             if (event.kind === 'status') {

@@ -410,6 +410,17 @@ export default function ClaudeCodeRoute() {
               return;
             if (event.kind === 'session_id') {
               setSessionId(event.text);
+              void saveClaudeCodeConversation({
+                id: currentConversationId,
+                claudeSessionId: event.text,
+                repositoryPath: workspacePath,
+                contextKey: currentContextKey,
+                title: currentTitle,
+                contextText: currentContextText,
+                messages: pendingMessages,
+                createdAt: nextCreatedAt,
+                updatedAt: Date.now(),
+              });
               return;
             }
             if (event.kind === 'status') {
