@@ -14,8 +14,11 @@
     "windows": [
       {
         "title": "Moark Desktop - AI Agent Client",
-        "width": 800,
-        "height": 600,
+        "width": 1280,
+        "height": 800,
+        "minWidth": 1000,
+        "minHeight": 650,
+        "center": true,
         "resizable": true,
         "fullscreen": false,
         "decorations": true,
@@ -82,7 +85,7 @@
       }
     },
     "macOS": {
-      "signingIdentity": null,
+      "signingIdentity": "-",
       "minimumSystemVersion": "10.15",
       "entitlements": "Entitlements.plist",
       "hardenedRuntime": true

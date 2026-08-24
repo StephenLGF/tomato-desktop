@@ -460,6 +460,8 @@ fn each_builtin_server_name_is_in_registry() {
         builtin::scheduled_task::NAME,
         builtin::setup_wizard::NAME,
         builtin::media::NAME,
+        builtin::ssh_environment_logs::NAME,
+        builtin::tomato::NAME,
         builtin::tool::NAME,
     ];
 
@@ -495,6 +497,8 @@ fn builtin_server_names_are_unique() {
         builtin::scheduled_task::NAME,
         builtin::setup_wizard::NAME,
         builtin::media::NAME,
+        builtin::ssh_environment_logs::NAME,
+        builtin::tomato::NAME,
         builtin::tool::NAME,
     ];
 
@@ -543,6 +547,8 @@ fn registry_and_server_list_are_in_sync() {
             BuiltinServiceId::SetupWizard => builtin::setup_wizard::NAME,
             BuiltinServiceId::Tool => builtin::tool::NAME,
             BuiltinServiceId::Media => builtin::media::NAME,
+            BuiltinServiceId::SshEnvironmentLogs => builtin::ssh_environment_logs::NAME,
+            BuiltinServiceId::Tomato => builtin::tomato::NAME,
         };
 
         if name.is_empty() {
@@ -555,6 +561,34 @@ fn registry_and_server_list_are_in_sync() {
             entry.variant
         );
     }
+}
+
+#[test]
+fn ssh_environment_logs_is_optional_and_exposes_read_only_inspection_tools() {
+    let entry = BUILTIN_SERVICE_REGISTRY
+        .iter()
+        .find(|entry| entry.variant == BuiltinServiceId::SshEnvironmentLogs)
+        .expect("ssh-environment-logs must be registered");
+    assert!(entry.optional);
+    assert_eq!(entry.canonical, "ssh-environment-logs");
+    assert_eq!(
+        BuiltinServiceId::from_alias("ssh_environment_logs"),
+        Some(BuiltinServiceId::SshEnvironmentLogs)
+    );
+
+    let names: Vec<String> = get_static_tools_for_server(entry.canonical)
+        .into_iter()
+        .map(|tool| tool.name)
+        .collect();
+    assert_eq!(
+        names,
+        [
+            "inspectProfile",
+            "discoverRuntime",
+            "searchDockerLogs",
+            "searchLogFile"
+        ]
+    );
 }
 
 // ─── Assistant tool schema regression tests ──────────────────────────────────

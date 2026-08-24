@@ -17,6 +17,7 @@ pub mod secure_file_manager;
 pub mod session_cleanup_service;
 pub mod session_directory_service;
 pub mod skill_service;
+pub mod tomato;
 pub mod workspace_runtime_manager;
 pub mod workspace_service;
 

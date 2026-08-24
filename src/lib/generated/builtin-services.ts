@@ -21,6 +21,8 @@ export const BUILTIN_SERVICE_CANONICAL_NAMES = [
   'setup-wizard',
   'tool',
   'media',
+  'ssh-environment-logs',
+  'tomato',
 ] as const;
 
 export type BuiltinServiceCanonicalName = typeof BUILTIN_SERVICE_CANONICAL_NAMES[number];
@@ -46,6 +48,9 @@ export const ALL_BUILTIN_SERVICE_ALIASES = [
   'bootstrap',
   'tool',
   'media',
+  'ssh-environment-logs',
+  'ssh_environment_logs',
+  'tomato',
 ] as const;
 
 export type BuiltinServiceAlias = typeof ALL_BUILTIN_SERVICE_ALIASES[number];
@@ -71,4 +76,6 @@ export const OPTIONAL_BUILTIN_SERVICE_ALIASES = [
   'browser',
   'setup-wizard',
   'media',
+  'ssh-environment-logs',
+  'tomato',
 ] as const;

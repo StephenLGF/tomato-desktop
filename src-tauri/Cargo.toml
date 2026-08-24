@@ -26,6 +26,7 @@ tauri-build = { version = "2", features = [] }
 agent-response-guards = { path = "agent-response-guards" }
 tauri = { version = "2", features = ["protocol-asset", "test"] }
 tauri-plugin-opener = "2"
+tauri-plugin-window-state = "2.4.1"
 
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["preserve_order"] }

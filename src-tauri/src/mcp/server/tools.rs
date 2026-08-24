@@ -443,6 +443,10 @@ pub fn list_available_builtin_server_definitions() -> Vec<BuiltinServerInfo> {
                 BuiltinServiceId::Ui => ui::UiServer::new().metadata(),
                 BuiltinServiceId::Tool => tool::ToolServer::new().metadata(),
                 BuiltinServiceId::Media => media::MediaServer::metadata_static(),
+                BuiltinServiceId::SshEnvironmentLogs => {
+                    ssh_environment_logs::SshEnvironmentLogsServer::metadata_static()
+                }
+                BuiltinServiceId::Tomato => tomato::TomatoServer::metadata_static(),
                 BuiltinServiceId::Skills => BuiltinServerMetadata {
                     display_name: "Skills".to_string(),
                     description: "Dynamic agent skills".to_string(),
@@ -610,5 +614,9 @@ pub fn get_static_tools_for_server(server_name: &str) -> Vec<MCPTool> {
         // Skills tools are session-bound; no static definition available.
         BuiltinServiceId::Skills => Vec::new(),
         BuiltinServiceId::Media => crate::mcp::builtin::media::MediaServer::tools_static(),
+        BuiltinServiceId::SshEnvironmentLogs => {
+            crate::mcp::builtin::ssh_environment_logs::SshEnvironmentLogsServer::tools_static()
+        }
+        BuiltinServiceId::Tomato => crate::mcp::builtin::tomato::TomatoServer::tools_static(),
     }
 }

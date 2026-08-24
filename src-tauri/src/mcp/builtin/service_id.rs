@@ -22,6 +22,9 @@ pub enum BuiltinServiceId {
     SetupWizard,
     Tool, // Unified Tool Domain
     Media,
+    #[serde(rename = "ssh-environment-logs", alias = "ssh_environment_logs")]
+    SshEnvironmentLogs,
+    Tomato,
 }
 
 /// Metadata for a builtin service used to generate registry and helper functions.
@@ -51,6 +54,8 @@ impl BuiltinServiceId {
             "setup-wizard" | "setup_wizard" | "bootstrap" => Some(Self::SetupWizard),
             "tool" => Some(Self::Tool),
             "media" => Some(Self::Media),
+            "ssh-environment-logs" | "ssh_environment_logs" => Some(Self::SshEnvironmentLogs),
+            "tomato" => Some(Self::Tomato),
             _ => None,
         }
     }
@@ -73,6 +78,8 @@ impl BuiltinServiceId {
             Self::SetupWizard => "setup-wizard",
             Self::Tool => "tool",
             Self::Media => "media",
+            Self::SshEnvironmentLogs => "ssh-environment-logs",
+            Self::Tomato => "tomato",
         }
     }
 }
@@ -152,6 +159,16 @@ pub const BUILTIN_SERVICE_REGISTRY: &[BuiltinServiceEntry] = &[
     BuiltinServiceEntry {
         variant: BuiltinServiceId::Media,
         canonical: "media",
+        optional: true,
+    },
+    BuiltinServiceEntry {
+        variant: BuiltinServiceId::SshEnvironmentLogs,
+        canonical: "ssh-environment-logs",
+        optional: true,
+    },
+    BuiltinServiceEntry {
+        variant: BuiltinServiceId::Tomato,
+        canonical: "tomato",
         optional: true,
     },
 ];

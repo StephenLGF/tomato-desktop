@@ -54,6 +54,9 @@ use commands::assistant_crud_commands::{
 };
 use commands::attachments_commands::delete_attachments;
 use commands::browser_commands::*;
+use commands::cli_commands::{
+    cancel_claude_code_chat, claude_code_chat, detect_cli_capabilities, list_claude_code_models,
+};
 use commands::dataset_commands::export_dataset;
 use commands::download_commands::{
     download_binary_file, download_media_file, download_text_file, download_text_pdf,
@@ -90,6 +93,7 @@ use commands::playbook_commands::{
     create_playbook, delete_playbook, get_playbook, list_playbooks, toggle_playbook_bookmark,
     update_playbook,
 };
+use commands::repository_commands::inspect_local_repository;
 use commands::scheduled_task_commands::{
     cancel_session_scheduled_task, create_scheduled_task, delete_scheduled_task,
     get_scheduled_task, list_scheduled_tasks, list_session_scheduled_tasks, toggle_scheduled_task,
@@ -107,6 +111,10 @@ use commands::skill_management::{
     copy_global_to_assistant, delete_assistant_skill, delete_user_skill, import_assistant_skills,
     import_user_skills, install_github_skills, preview_github_skill_install,
     preview_user_skill_import, reset_assistant_skills, reset_user_skills,
+};
+use commands::tomato_commands::{
+    tomato_disconnect, tomato_execute_transition, tomato_get_item, tomato_get_session,
+    tomato_list_transitions, tomato_save_connection, tomato_search_items,
 };
 use commands::url_commands::{open_external_url, open_path_with_default_app};
 use commands::workspace_commands::{
@@ -179,6 +187,7 @@ pub fn run() {
             .plugin(tauri_plugin_http::init())
             .plugin(tauri_plugin_dialog::init())
             .plugin(tauri_plugin_opener::init())
+            .plugin(tauri_plugin_window_state::Builder::default().build())
             .plugin(tauri_plugin_updater::Builder::new().build())
             .invoke_handler(tauri::generate_handler![
                 greet,
@@ -223,6 +232,11 @@ pub fn run() {
                 get_global_knowledge_detail,
                 delete_global_knowledge,
                 open_external_url,
+                detect_cli_capabilities,
+                list_claude_code_models,
+                claude_code_chat,
+                cancel_claude_code_chat,
+                inspect_local_repository,
                 open_path_with_default_app,
                 open_workspace_file_with_default_app,
                 open_workspace_in_explorer,
@@ -340,6 +354,13 @@ pub fn run() {
                 get_setting,
                 delete_setting,
                 list_settings,
+                tomato_get_session,
+                tomato_save_connection,
+                tomato_disconnect,
+                tomato_search_items,
+                tomato_get_item,
+                tomato_list_transitions,
+                tomato_execute_transition,
                 export_migration,
                 import_migration,
                 inspect_migration,

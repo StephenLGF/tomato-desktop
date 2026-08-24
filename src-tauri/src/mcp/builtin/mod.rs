@@ -21,6 +21,8 @@ pub mod scratchpad;
 pub mod service_id;
 pub mod setup_wizard;
 pub mod skills;
+pub mod ssh_environment_logs;
+pub mod tomato;
 pub mod tool;
 pub mod tool_description;
 pub mod ui;

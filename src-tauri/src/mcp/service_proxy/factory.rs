@@ -136,5 +136,11 @@ pub(crate) async fn create_builtin_server(
         BuiltinServiceId::Media => Ok(Some(Box::new(
             crate::mcp::builtin::media::MediaServer::new(_session_id, _session_manager),
         ))),
+        BuiltinServiceId::SshEnvironmentLogs => Ok(Some(Box::new(
+            crate::mcp::builtin::ssh_environment_logs::SshEnvironmentLogsServer::new(),
+        ))),
+        BuiltinServiceId::Tomato => Ok(Some(Box::new(
+            crate::mcp::builtin::tomato::TomatoServer::new(),
+        ))),
     }
 }
