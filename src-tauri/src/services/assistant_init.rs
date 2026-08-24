@@ -6,26 +6,35 @@ use std::collections::HashMap;
 use std::path::Path;
 
 // Embedded prompts and configs (SSOT - Single Source of Truth)
-const MASTER_MIND_PROMPT: &str = include_str!("../../bundled_assistants/Master Mind/prompt.md");
-const MASTER_MIND_CONFIG: &str =
-    include_str!("../../bundled_assistants/Master Mind/mcp-config.json");
+const MASTER_MIND_PROMPT: &str = include_str!("../../bundled_assistants/总控/prompt.md");
+const MASTER_MIND_CONFIG: &str = include_str!("../../bundled_assistants/总控/mcp-config.json");
 
-const LIBR_ASSISTANT_PROMPT: &str =
-    include_str!("../../bundled_assistants/Libr Assistant/prompt.md");
+const LIBR_ASSISTANT_PROMPT: &str = include_str!("../../bundled_assistants/通用助手/prompt.md");
 const LIBR_ASSISTANT_CONFIG: &str =
-    include_str!("../../bundled_assistants/Libr Assistant/mcp-config.json");
+    include_str!("../../bundled_assistants/通用助手/mcp-config.json");
 
-const CODING_EXPERT_PROMPT: &str = include_str!("../../bundled_assistants/Coding Expert/prompt.md");
+const CODING_EXPERT_PROMPT: &str = include_str!("../../bundled_assistants/编程专家/prompt.md");
 const CODING_EXPERT_CONFIG: &str =
-    include_str!("../../bundled_assistants/Coding Expert/mcp-config.json");
+    include_str!("../../bundled_assistants/编程专家/mcp-config.json");
 
-const APP_WIZARD_PROMPT: &str = include_str!("../../bundled_assistants/App Wizard/prompt.md");
-const APP_WIZARD_CONFIG: &str = include_str!("../../bundled_assistants/App Wizard/mcp-config.json");
-const DEFAULT_ASSISTANT_NAMES: [&str; 4] = [
-    "Master Mind",
-    "Libr Assistant",
-    "Coding Expert",
-    "App Wizard",
+const APP_WIZARD_PROMPT: &str = include_str!("../../bundled_assistants/配置向导/prompt.md");
+const APP_WIZARD_CONFIG: &str = include_str!("../../bundled_assistants/配置向导/mcp-config.json");
+const CLAUDE_CODE_PROMPT: &str =
+    include_str!("../../bundled_assistants/Claude Code 助手/prompt.md");
+const CLAUDE_CODE_CONFIG: &str =
+    include_str!("../../bundled_assistants/Claude Code 助手/mcp-config.json");
+const DEFAULT_ASSISTANT_NAMES: [&str; 5] = [
+    "总控",
+    "通用助手",
+    "编程专家",
+    "配置向导",
+    "Claude Code 助手",
+];
+const LEGACY_ASSISTANT_NAMES: [(&str, &str); 4] = [
+    ("Master Mind", "总控"),
+    ("Libr Assistant", "通用助手"),
+    ("Coding Expert", "编程专家"),
+    ("App Wizard", "配置向导"),
 ];
 
 #[derive(Debug, Clone, Deserialize)]
@@ -33,11 +42,15 @@ const DEFAULT_ASSISTANT_NAMES: [&str; 4] = [
 pub(crate) struct BundledAssistantConfig {
     pub(crate) description: String,
     #[serde(default)]
+    pub(crate) runtime: Option<String>,
+    #[serde(default)]
     pub(crate) mcp_server_ids: Vec<String>,
     #[serde(default = "default_false")]
     pub(crate) deletion_protected: bool,
     #[serde(default)]
     pub(crate) local_services: Vec<String>,
+    #[serde(default)]
+    pub(crate) show_in_sidebar: bool,
     #[serde(rename = "allowedBuiltInServiceAliases")]
     pub(crate) allowed_builtin_service_aliases: Vec<String>,
 }
@@ -250,10 +263,36 @@ pub async fn ensure_default_assistants(resource_dir: Option<&Path>) -> Result<()
         .map(|a| (a.name.clone(), a))
         .collect();
 
+    for (legacy_name, current_name) in LEGACY_ASSISTANT_NAMES {
+        if existing_map.contains_key(current_name) {
+            continue;
+        }
+        if let Some(mut existing) = existing_map.remove(legacy_name) {
+            repo.update_assistant(&existing.id, Some(current_name.to_string()), None)
+                .await
+                .map_err(|e| format!("Failed to rename assistant '{}': {}", legacy_name, e))?;
+            existing.name = current_name.to_string();
+            existing_map.insert(current_name.to_string(), existing);
+        }
+    }
+
     for assistant in &bundled {
         log::info!("Ensuring assistant: {}", assistant.name);
 
-        if let Some(_existing) = existing_map.remove(&assistant.name) {
+        if let Some(existing) = existing_map.remove(&assistant.name) {
+            let mut existing_config =
+                serde_json::from_str::<Value>(&existing.config).unwrap_or_else(|_| json!({}));
+            if existing_config.get("showInSidebar").is_none() {
+                existing_config["showInSidebar"] = Value::Bool(assistant.config.show_in_sidebar);
+                repo.update_assistant(&existing.id, None, Some(existing_config.to_string()))
+                    .await
+                    .map_err(|e| {
+                        format!(
+                            "Failed to initialize sidebar preference for '{}': {}",
+                            assistant.name, e
+                        )
+                    })?;
+            }
             log::info!(
                 "Assistant '{}' already exists, skipping initialization to preserve user changes.",
                 assistant.name
@@ -262,6 +301,9 @@ pub async fn ensure_default_assistants(resource_dir: Option<&Path>) -> Result<()
         } else {
             let mut config_val = json!({});
             config_val["description"] = Value::String(assistant.config.description.clone());
+            if let Some(runtime) = &assistant.config.runtime {
+                config_val["runtime"] = Value::String(runtime.clone());
+            }
             config_val["systemPrompt"] = Value::String(assistant.prompt.clone());
             config_val["mcpServerIds"] = Value::Array(
                 assistant
@@ -280,6 +322,7 @@ pub async fn ensure_default_assistants(resource_dir: Option<&Path>) -> Result<()
                     .map(|s| Value::String(s.clone()))
                     .collect(),
             );
+            config_val["showInSidebar"] = Value::Bool(assistant.config.show_in_sidebar);
             config_val["allowedBuiltInServiceAliases"] = Value::Array(
                 assistant
                     .config
@@ -321,15 +364,34 @@ pub async fn ensure_default_assistants(resource_dir: Option<&Path>) -> Result<()
 pub async fn ensure_default_assistants_hardcoded() -> Result<(), String> {
     let repo = crate::get_assistant_repository();
 
+    let existing_assistants = repo
+        .list_assistants()
+        .await
+        .map_err(|e| format!("Failed to list assistants: {}", e))?;
+    let existing_names = existing_assistants
+        .iter()
+        .map(|assistant| assistant.name.as_str())
+        .collect::<std::collections::HashSet<_>>();
+    for (legacy_name, current_name) in LEGACY_ASSISTANT_NAMES {
+        if existing_names.contains(current_name) {
+            continue;
+        }
+        if let Some(existing) = existing_assistants
+            .iter()
+            .find(|assistant| assistant.name == legacy_name)
+        {
+            repo.update_assistant(&existing.id, Some(current_name.to_string()), None)
+                .await
+                .map_err(|e| format!("Failed to rename assistant '{}': {}", legacy_name, e))?;
+        }
+    }
+
     let defaults = vec![
-        ("Master Mind", MASTER_MIND_PROMPT, MASTER_MIND_CONFIG),
-        (
-            "Libr Assistant",
-            LIBR_ASSISTANT_PROMPT,
-            LIBR_ASSISTANT_CONFIG,
-        ),
-        ("Coding Expert", CODING_EXPERT_PROMPT, CODING_EXPERT_CONFIG),
-        ("App Wizard", APP_WIZARD_PROMPT, APP_WIZARD_CONFIG),
+        ("总控", MASTER_MIND_PROMPT, MASTER_MIND_CONFIG),
+        ("通用助手", LIBR_ASSISTANT_PROMPT, LIBR_ASSISTANT_CONFIG),
+        ("编程专家", CODING_EXPERT_PROMPT, CODING_EXPERT_CONFIG),
+        ("配置向导", APP_WIZARD_PROMPT, APP_WIZARD_CONFIG),
+        ("Claude Code 助手", CLAUDE_CODE_PROMPT, CLAUDE_CODE_CONFIG),
     ];
     let default_names: Vec<&str> = defaults.iter().map(|(n, _, _)| *n).collect();
 

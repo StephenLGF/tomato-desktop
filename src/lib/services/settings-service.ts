@@ -151,7 +151,7 @@ export const DEFAULT_SETTING: Settings = {
   contextStrategy: 'compact',
   windowSize: 20,
   maxInputContext: 49152,
-  uiLanguage: 'en',
+  uiLanguage: 'zh',
   toolCallGroupVisibleCount: 4,
   agentHubUrl: '',
   advanced: {

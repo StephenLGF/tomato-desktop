@@ -80,6 +80,29 @@ export default function AssistantEditor({
             className="min-h-16"
           />
 
+          <div className="flex items-start gap-3 rounded-lg border p-3">
+            <Checkbox
+              id="assistant-show-in-sidebar"
+              checked={draft?.showInSidebar ?? false}
+              onCheckedChange={(checked) =>
+                update((assistant: Assistant) => {
+                  assistant.showInSidebar = checked === true;
+                })
+              }
+            />
+            <div className="space-y-1">
+              <Label htmlFor="assistant-show-in-sidebar">
+                {t('assistant.showInSidebar', '显示在侧边栏')}
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                {t(
+                  'assistant.showInSidebarDescription',
+                  '为这个助手创建固定侧边栏入口。',
+                )}
+              </p>
+            </div>
+          </div>
+
           <TextareaWithLabel
             label={t('assistant.systemPromptLabel')}
             value={draft?.systemPrompt || ''}

@@ -145,7 +145,7 @@
     "mobileTitle": "Sidebar",
     "mobileDescription": "Displays the mobile sidebar.",
     "toggle": "Toggle Sidebar",
-    "library": "Library",
+    "library": "Resources",
     "chat": "Chat",
     "assistants": "Assistants",
     "playbooks": "Playbooks",
@@ -161,7 +161,8 @@
     "org": "Org",
     "expandSession": "Expand session children",
     "collapseSession": "Collapse session children",
-    "loadingSessionChildren": "Loading session children"
+    "loadingSessionChildren": "Loading session children",
+    "feishuBots": "Feishu Bots"
   },
   "sessionHistory": {
     "heading": "Session History",
@@ -1098,7 +1099,9 @@
       "resumeAriaLabel": "Resume workflow",
       "resumeTooltip": "Resume",
       "sendAriaLabel": "Send message",
-      "sendTooltip": "Send"
+      "sendTooltip": "Send",
+      "historyPrevAriaLabel": "Previous message",
+      "historyNextAriaLabel": "Next message"
     },
     "toolGroup": {
       "header_one": "Tool Executions ({{count}} call)",

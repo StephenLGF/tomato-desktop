@@ -14,6 +14,8 @@ const AssistantConfigSchema = z
     localServices: z.array(z.string()).optional(),
     allowedBuiltInServiceAliases: z.array(z.string()).optional(),
     disabledSkills: z.array(z.string()).optional(),
+    showInSidebar: z.boolean().default(false),
+    runtime: z.enum(['libragent', 'claude-code']).optional(),
     deletionProtected: z.boolean().default(false),
   })
   .passthrough();
@@ -66,6 +68,8 @@ export const parseAssistant = (data: unknown): Assistant => {
     localServices: config.localServices,
     allowedBuiltInServiceAliases: config.allowedBuiltInServiceAliases,
     disabledSkills: config.disabledSkills,
+    showInSidebar: config.showInSidebar ?? false,
+    runtime: config.runtime,
     deletionProtected: config.deletionProtected ?? false,
   };
 };

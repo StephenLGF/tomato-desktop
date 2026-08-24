@@ -31,7 +31,7 @@ if (!i18n.isInitialized) {
         de: { common: deCommon },
         pt: { common: ptCommon },
       },
-      fallbackLng: 'en',
+      fallbackLng: 'zh',
       supportedLngs: ['en', 'ko', 'zh', 'ja', 'fr', 'es', 'de', 'pt'],
       nonExplicitSupportedLngs: true,
       load: 'languageOnly',
@@ -41,8 +41,8 @@ if (!i18n.isInitialized) {
         escapeValue: false, // React already escapes
       },
       detection: {
-        // Prefer explicit selection (localStorage), then browser
-        order: ['localStorage', 'navigator'],
+        // Honor an explicit saved selection; new installations default to Chinese.
+        order: ['localStorage'],
         caches: ['localStorage'],
       },
       react: {

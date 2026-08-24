@@ -133,6 +133,7 @@ export function getNewAssistantTemplate(): Assistant {
     createdAt: new Date(),
     updatedAt: new Date(),
     deletionProtected: false,
+    showInSidebar: false,
   };
 }
 
@@ -274,6 +275,7 @@ export const AssistantContextProvider = ({
           deletionProtected: editingAssistant.deletionProtected ?? false,
           localServices: editingAssistant.localServices ?? [],
           disabledSkills: editingAssistant.disabledSkills,
+          showInSidebar: editingAssistant.showInSidebar ?? false,
           createdAt: assistantCreatedAt || new Date(),
           updatedAt: new Date(),
         };
@@ -286,6 +288,7 @@ export const AssistantContextProvider = ({
         logger.info(`Saving assistant`, { assistantToSave });
 
         await assistantService.save(assistantToSave);
+        window.dispatchEvent(new Event('assistant-config-changed'));
 
         if (currentAssistant?.id === assistantToSave.id || !currentAssistant) {
           setCurrentAssistant(assistantToSave);

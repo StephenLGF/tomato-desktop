@@ -21,30 +21,30 @@ async fn test_load_bundled_assistants_from_manifest() {
 
     assert_eq!(
         assistants.len(),
-        4,
-        "expected exactly four bundled assistants"
+        5,
+        "expected exactly five bundled assistants"
     );
 
     let names: Vec<&str> = assistants.iter().map(|a| a.name.as_str()).collect();
-    assert!(names.contains(&"Libr Assistant"));
-    assert!(names.contains(&"Coding Expert"));
-    assert!(names.contains(&"App Wizard"));
-    assert!(names.contains(&"Master Mind"));
+    assert!(names.contains(&"通用助手"));
+    assert!(names.contains(&"编程专家"));
+    assert!(names.contains(&"配置向导"));
+    assert!(names.contains(&"总控"));
+    assert!(names.contains(&"Claude Code 助手"));
     assert!(
         !names.contains(&"master-mind"),
         "legacy master-mind directory must not be loaded"
     );
 
-    // Deep parity verification for Master Mind
+    // Deep parity verification for 总控
     let master_mind = assistants
         .iter()
-        .find(|a| a.name == "Master Mind")
-        .expect("Master Mind should be loaded");
+        .find(|a| a.name == "总控")
+        .expect("总控 should be loaded");
 
-    let expected_prompt = std::fs::read_to_string(
-        manifest_resource_dir().join("bundled_assistants/Master Mind/prompt.md"),
-    )
-    .expect("failed to read expected prompt");
+    let expected_prompt =
+        std::fs::read_to_string(manifest_resource_dir().join("bundled_assistants/总控/prompt.md"))
+            .expect("failed to read expected prompt");
     assert_eq!(master_mind.prompt(), expected_prompt);
 
     assert_eq!(
@@ -57,14 +57,14 @@ async fn test_load_bundled_assistants_from_manifest() {
         ]
     );
 
-    // Deep parity verification for Libr Assistant (including checking its sample skill)
+    // Deep parity verification for 通用助手 (including checking its sample skill)
     let libr_assistant = assistants
         .iter()
-        .find(|a| a.name == "Libr Assistant")
-        .expect("Libr Assistant should be loaded");
+        .find(|a| a.name == "通用助手")
+        .expect("通用助手 should be loaded");
 
     let expected_libr_prompt = std::fs::read_to_string(
-        manifest_resource_dir().join("bundled_assistants/Libr Assistant/prompt.md"),
+        manifest_resource_dir().join("bundled_assistants/通用助手/prompt.md"),
     )
     .expect("failed to read expected prompt");
     assert_eq!(libr_assistant.prompt(), expected_libr_prompt);
@@ -96,13 +96,14 @@ async fn test_ensure_default_assistants_hardcoded_fallback() {
         .list_assistants()
         .await
         .expect("failed to list assistants");
-    assert_eq!(assistants.len(), 4);
+    assert_eq!(assistants.len(), 5);
 
     let names: Vec<String> = assistants.into_iter().map(|a| a.name).collect();
-    assert!(names.contains(&"Libr Assistant".to_string()));
-    assert!(names.contains(&"Coding Expert".to_string()));
-    assert!(names.contains(&"App Wizard".to_string()));
-    assert!(names.contains(&"Master Mind".to_string()));
+    assert!(names.contains(&"通用助手".to_string()));
+    assert!(names.contains(&"编程专家".to_string()));
+    assert!(names.contains(&"配置向导".to_string()));
+    assert!(names.contains(&"总控".to_string()));
+    assert!(names.contains(&"Claude Code 助手".to_string()));
 }
 
 #[tokio::test]
@@ -120,13 +121,14 @@ async fn test_ensure_default_assistants_from_bundle() {
         .list_assistants()
         .await
         .expect("failed to list assistants");
-    assert_eq!(assistants.len(), 4);
+    assert_eq!(assistants.len(), 5);
 
     let names: Vec<String> = assistants.into_iter().map(|a| a.name).collect();
-    assert!(names.contains(&"Libr Assistant".to_string()));
-    assert!(names.contains(&"Coding Expert".to_string()));
-    assert!(names.contains(&"App Wizard".to_string()));
-    assert!(names.contains(&"Master Mind".to_string()));
+    assert!(names.contains(&"通用助手".to_string()));
+    assert!(names.contains(&"编程专家".to_string()));
+    assert!(names.contains(&"配置向导".to_string()));
+    assert!(names.contains(&"总控".to_string()));
+    assert!(names.contains(&"Claude Code 助手".to_string()));
 }
 
 #[tokio::test]
@@ -142,8 +144,8 @@ async fn test_ensure_default_assistants_falls_back_when_bundle_is_incomplete() {
         &resource_root.join("bundled_assistants"),
     );
 
-    std::fs::remove_file(resource_root.join("bundled_assistants/Master Mind/prompt.md"))
-        .expect("Master Mind prompt should be removable");
+    std::fs::remove_file(resource_root.join("bundled_assistants/总控/prompt.md"))
+        .expect("总控 prompt should be removable");
 
     ensure_default_assistants(Some(&resource_root))
         .await
@@ -157,13 +159,14 @@ async fn test_ensure_default_assistants_falls_back_when_bundle_is_incomplete() {
     let names: Vec<String> = assistants.into_iter().map(|a| a.name).collect();
 
     assert!(
-        names.contains(&"Master Mind".to_string()),
+        names.contains(&"总控".to_string()),
         "fallback should preserve the missing default assistant"
     );
     assert!(
-        names.contains(&"Libr Assistant".to_string())
-            && names.contains(&"Coding Expert".to_string())
-            && names.contains(&"App Wizard".to_string()),
+        names.contains(&"通用助手".to_string())
+            && names.contains(&"编程专家".to_string())
+            && names.contains(&"配置向导".to_string())
+            && names.contains(&"Claude Code 助手".to_string()),
         "fallback should keep the full default assistant set"
     );
 }
@@ -221,10 +224,7 @@ async fn test_zombie_assistant_cleanup_bundle_path() {
         names.contains(&user_name),
         "user custom assistant must be kept"
     );
-    assert!(
-        names.contains(&"Master Mind".to_string()),
-        "Master Mind must exist"
-    );
+    assert!(names.contains(&"总控".to_string()), "总控 must exist");
 }
 
 #[tokio::test]
@@ -280,10 +280,7 @@ async fn test_zombie_assistant_cleanup_fallback_path() {
         names.contains(&user_name),
         "user custom assistant must be kept"
     );
-    assert!(
-        names.contains(&"Master Mind".to_string()),
-        "Master Mind must exist"
-    );
+    assert!(names.contains(&"总控".to_string()), "总控 must exist");
 }
 
 #[tokio::test]
@@ -303,16 +300,16 @@ async fn test_sync_assistant_bundled_skills() {
     .await
     .expect("skills sync should succeed");
 
-    // Assert that the sample_helper skill was copied to the target directory under the Libr Assistant's ID
+    // Assert that the sample_helper skill was copied to the target directory under the 通用助手's ID
     let repo = SqliteAssistantRepository::new(db);
     let assistants = repo.list_assistants().await.expect("failed to list");
     let libr = assistants
         .iter()
-        .find(|a| a.name == "Libr Assistant")
-        .expect("Libr Assistant should exist");
+        .find(|a| a.name == "通用助手")
+        .expect("通用助手 should exist");
 
     let source_skill_path = manifest_resource_dir()
-        .join("bundled_assistants/Libr Assistant/bundled_skills/sample_helper/SKILL.md");
+        .join("bundled_assistants/通用助手/bundled_skills/sample_helper/SKILL.md");
 
     let target_skill_path = target_dir
         .join("assistants")
@@ -379,8 +376,8 @@ async fn test_sync_assistant_bundled_skills_removes_stale_bundled_skill_but_keep
         .expect("failed to list assistants");
     let libr = assistants
         .iter()
-        .find(|a| a.name == "Libr Assistant")
-        .expect("Libr Assistant should exist");
+        .find(|a| a.name == "通用助手")
+        .expect("通用助手 should exist");
 
     let assistant_skills_dir = target_dir.join("assistants").join(&libr.id).join("skills");
     let bundled_skill_dir = assistant_skills_dir.join("sample_helper");
@@ -390,7 +387,7 @@ async fn test_sync_assistant_bundled_skills_removes_stale_bundled_skill_but_keep
     std::fs::write(user_skill_dir.join("SKILL.md"), "# User Skill\n").expect("user skill file");
 
     std::fs::remove_dir_all(
-        resource_root.join("bundled_assistants/Libr Assistant/bundled_skills/sample_helper"),
+        resource_root.join("bundled_assistants/通用助手/bundled_skills/sample_helper"),
     )
     .expect("bundled skill should be removable from source");
 
@@ -441,8 +438,8 @@ async fn test_sync_assistant_bundled_skills_removes_snapshot_when_bundle_directo
         .expect("failed to list assistants");
     let libr = assistants
         .iter()
-        .find(|a| a.name == "Libr Assistant")
-        .expect("Libr Assistant should exist");
+        .find(|a| a.name == "通用助手")
+        .expect("通用助手 should exist");
 
     let bundled_skill_dir = target_dir
         .join("assistants")
@@ -450,7 +447,7 @@ async fn test_sync_assistant_bundled_skills_removes_snapshot_when_bundle_directo
         .join("skills")
         .join("sample_helper");
 
-    std::fs::remove_dir_all(resource_root.join("bundled_assistants/Libr Assistant/bundled_skills"))
+    std::fs::remove_dir_all(resource_root.join("bundled_assistants/通用助手/bundled_skills"))
         .expect("bundled skills directory should be removable from source");
 
     tauri_mcp_agent_lib::lifecycle::app_setup::sync_assistant_bundled_skills(
@@ -496,8 +493,8 @@ async fn test_sync_assistant_bundled_skills_restores_missing_snapshot_directory(
         .expect("failed to list assistants");
     let libr = assistants
         .iter()
-        .find(|a| a.name == "Libr Assistant")
-        .expect("Libr Assistant should exist");
+        .find(|a| a.name == "通用助手")
+        .expect("通用助手 should exist");
 
     let bundled_skill_dir = target_dir
         .join("assistants")
@@ -544,8 +541,8 @@ async fn test_sync_assistant_bundled_skills_clears_snapshots_when_bundle_root_is
         .expect("failed to list assistants");
     let libr = assistants
         .iter()
-        .find(|a| a.name == "Libr Assistant")
-        .expect("Libr Assistant should exist");
+        .find(|a| a.name == "通用助手")
+        .expect("通用助手 should exist");
 
     let assistant_skills_dir = target_dir.join("assistants").join(&libr.id).join("skills");
     let bundled_skill_dir = assistant_skills_dir.join("sample_helper");

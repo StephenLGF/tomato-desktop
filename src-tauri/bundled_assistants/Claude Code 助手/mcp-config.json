@@ -1,0 +1,9 @@
+{
+  "description": "通过本机 Claude CLI 在代码仓库中分析、修改和验证代码。",
+  "runtime": "claude-code",
+  "mcpServerIds": [],
+  "deletionProtected": true,
+  "localServices": [],
+  "showInSidebar": false,
+  "allowedBuiltInServiceAliases": []
+}

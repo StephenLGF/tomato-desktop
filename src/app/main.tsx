@@ -25,7 +25,7 @@ markStartupMilestone('root-render-start');
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <SettingsProvider>
           <ErrorBoundary>
             <App />

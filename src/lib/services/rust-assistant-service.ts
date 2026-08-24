@@ -19,6 +19,7 @@ interface AssistantConfig {
   mcpServerIds?: string[];
   localServices?: string[];
   allowedBuiltInServiceAliases?: string[];
+  runtime?: 'libragent' | 'claude-code';
   deletionProtected: boolean;
   model?: string;
   provider?: string;

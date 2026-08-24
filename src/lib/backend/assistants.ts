@@ -19,6 +19,7 @@ export interface AssistantSummaryDto {
   name: string;
   description?: string | null;
   deletionProtected: boolean;
+  showInSidebar?: boolean;
 }
 
 export interface AssistantSummary {
@@ -26,6 +27,7 @@ export interface AssistantSummary {
   name: string;
   description?: string;
   deletionProtected: boolean;
+  showInSidebar?: boolean;
 }
 
 // Convert frontend Assistant model to backend params
@@ -108,6 +110,7 @@ export async function listAssistantSummaries(): Promise<AssistantSummary[]> {
     name: dto.name,
     description: dto.description ?? undefined,
     deletionProtected: dto.deletionProtected,
+    showInSidebar: dto.showInSidebar ?? false,
   }));
 }
 

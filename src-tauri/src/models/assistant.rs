@@ -31,6 +31,7 @@ pub struct AssistantSummaryDto {
     pub name: String,
     pub description: Option<String>,
     pub deletion_protected: bool,
+    pub show_in_sidebar: bool,
 }
 
 impl From<AssistantModel> for AssistantSummaryDto {
@@ -46,6 +47,10 @@ impl From<AssistantModel> for AssistantSummaryDto {
                 .map(|value| value.to_string()),
             deletion_protected: config
                 .get("deletionProtected")
+                .and_then(|value| value.as_bool())
+                .unwrap_or(false),
+            show_in_sidebar: config
+                .get("showInSidebar")
                 .and_then(|value| value.as_bool())
                 .unwrap_or(false),
         }

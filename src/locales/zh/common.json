@@ -145,7 +145,7 @@
     "mobileTitle": "侧边栏",
     "mobileDescription": "显示移动端侧边栏。",
     "toggle": "切换侧边栏",
-    "library": "库",
+    "library": "资源",
     "chat": "聊天",
     "assistants": "助手",
     "playbooks": "剧本",
@@ -161,7 +161,8 @@
     "org": "组织",
     "expandSession": "展开子会话",
     "collapseSession": "折叠子会话",
-    "loadingSessionChildren": "正在加载子会话"
+    "loadingSessionChildren": "正在加载子会话",
+    "feishuBots": "飞书机器人"
   },
   "sessionHistory": {
     "heading": "会话历史",
@@ -1049,7 +1050,9 @@
       "resumeAriaLabel": "恢复工作流",
       "resumeTooltip": "恢复",
       "sendAriaLabel": "发送消息",
-      "sendTooltip": "发送"
+      "sendTooltip": "发送",
+      "historyPrevAriaLabel": "上一条消息",
+      "historyNextAriaLabel": "下一条消息"
     },
     "toolGroup": {
       "header_one": "工具执行 ({{count}} 次调用)",
