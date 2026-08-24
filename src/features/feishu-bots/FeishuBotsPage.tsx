@@ -139,7 +139,7 @@ function BotDialog({
         </DialogHeader>
 
         <div className="space-y-4 py-2">
-          <label className="space-y-1.5">
+          <label className="flex flex-col space-y-1.5">
             <span className="text-sm font-medium">
               {t('feishuBots.fields.name', '机器人名称')}
             </span>
@@ -150,7 +150,7 @@ function BotDialog({
               autoFocus
             />
           </label>
-          <label className="space-y-1.5">
+          <label className="flex flex-col space-y-1.5">
             <span className="text-sm font-medium">App ID</span>
             <Input
               value={form.appId ?? ''}
@@ -159,7 +159,7 @@ function BotDialog({
               autoComplete="off"
             />
           </label>
-          <label className="space-y-1.5">
+          <label className="flex flex-col space-y-1.5">
             <span className="text-sm font-medium">App Secret</span>
             <div className="relative">
               <Input
@@ -180,7 +180,7 @@ function BotDialog({
               </button>
             </div>
           </label>
-          <label className="space-y-1.5">
+          <label className="flex flex-col space-y-1.5">
             <span className="text-sm font-medium">
               {t('feishuBots.fields.verificationToken', 'Verification Token（可选）')}
             </span>
