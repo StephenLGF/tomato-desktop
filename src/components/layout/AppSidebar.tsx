@@ -19,7 +19,6 @@ import {
   ClipboardList,
   TerminalSquare,
   FolderGit2,
-  MessageSquare,
   Plus,
   Pencil,
   Trash2,
@@ -398,21 +397,6 @@ export default function AppSidebar() {
                   <Link to="/tomato" className="flex w-full items-center gap-2">
                     <ClipboardList className="shrink-0" />
                     <span>{t('sidebar.tomatoWorkboard', '番茄工作台')}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={location.pathname.startsWith('/tomato/feishu-bots')}
-                  tooltip={t('sidebar.feishuBots', '飞书机器人')}
-                >
-                  <Link
-                    to="/tomato/feishu-bots"
-                    className="flex w-full items-center gap-2"
-                  >
-                    <MessageSquare className="shrink-0" />
-                    <span>{t('sidebar.feishuBots', '飞书机器人')}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
