@@ -1,5 +1,5 @@
 {
-  "appName": "LibrAgent",
+  "appName": "Tomato Desktop",
   "assistant": {
     "nameLabel": "Name des Assistenten *",
     "namePlaceholder": "Name des Assistenten eingeben...",
@@ -532,7 +532,7 @@
       "maxSuspendedProcessesPlaceholder": "z. B. 20",
       "toolResultInlineLimit": "Inline-Limit für Tool-Ergebnisse (KB)",
       "toolResultInlineLimitPlaceholder": "z. B. 16",
-      "toolResultInlineLimitDescription": "Steuert, wie viel Tool-Ausgabe inline bleibt, bevor LibrAgent das vollständige Ergebnis in eine Arbeitsbereichsdatei auslagert. Niedrigere Werte halten den Agentenkontext schlanker.",
+      "toolResultInlineLimitDescription": "Steuert, wie viel Tool-Ausgabe inline bleibt, bevor Tomato Desktop das vollständige Ergebnis in eine Arbeitsbereichsdatei auslagert. Niedrigere Werte halten den Agentenkontext schlanker.",
       "shellIsolation": "Shell-Isolationsstufe",
       "shellIsolationModes": {
         "basic": "Basis - Voller PATH-Zugriff (weniger sicher)",
@@ -575,7 +575,7 @@
       "maxScheduledTaskGroupsDescription": "Maximale Anzahl unterschiedlicher geplanter Aufgabengruppen, die in wiederkehrender Teamwork-Automatisierung erlaubt sind.",
       "backgroundTasks": "Hintergrundaufgaben",
       "preventSleepDuringAgentWork": "Ruhezustand verhindern, solange die App läuft",
-      "preventSleepDuringAgentWorkDescription": "Verhindert den Idle-Ruhezustand, solange LibrAgent geöffnet ist. Hält das Display nicht zwingend an. Standardmäßig aktiviert.",
+      "preventSleepDuringAgentWorkDescription": "Verhindert den Idle-Ruhezustand, solange Tomato Desktop geöffnet ist. Hält das Display nicht zwingend an. Standardmäßig aktiviert.",
       "searchIndexFrequency": "Suchindex-Frequenz (Min)",
       "searchIndexFrequencyDescription": "Wie oft die KI ihre Gedächtnissuche aktualisiert. Schnellere Updates halten die Suche aktuell, verbrauchen aber mehr Akku/CPU.",
       "webActionTimeout": "Web-Aktions-Timeout (Sek)",

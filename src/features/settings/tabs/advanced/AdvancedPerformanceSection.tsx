@@ -148,7 +148,7 @@ function AdvancedPerformanceSectionComponent({
           )}
           description={t(
             'settings.advanced.toolResultInlineLimitDescription',
-            'Controls how much tool output stays inline before LibrAgent spills the full result to a workspace file. Lower values keep the agent context leaner.',
+            'Controls how much tool output stays inline before Tomato Desktop spills the full result to a workspace file. Lower values keep the agent context leaner.',
           )}
           placeholder={t(
             'settings.advanced.toolResultInlineLimitPlaceholder',

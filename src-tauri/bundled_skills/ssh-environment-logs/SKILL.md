@@ -14,9 +14,9 @@ description: SSH-based workflow for safely inspecting logs on configured develop
 
 Use this skill only for **authorized, read-only log inspection**. It is intended for development, testing, and defensive troubleshooting. Never use it to access an environment without authorization.
 
-## Moark Desktop tool and path conventions
+## Tomato Desktop tool and path conventions
 
-- Execute commands through the Moark Desktop workspace tool `workspace__runCommand`.
+- Execute commands through the Tomato Desktop workspace tool `workspace__runCommand`.
 - Use `workspace__runInPersistentShell` only when several commands need the same shell state.
 - On Windows, use `workspace__runPowerShell` or `workspace__runInPersistentPowerShell`.
 - Prefer the workspace tool over inventing scripts or asking the user to copy secrets into chat.

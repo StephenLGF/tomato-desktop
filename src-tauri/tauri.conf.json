@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Moark Desktop",
+  "productName": "Tomato Desktop",
   "version": "0.9.5",
-  "identifier": "com.moark.desktop",
+  "identifier": "com.tomato.desktop",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "Moark Desktop - AI Agent Client",
+        "title": "Tomato Desktop - AI Agent Client",
         "width": 1280,
         "height": 800,
         "minWidth": 1000,
@@ -44,7 +44,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEM3QjY3NEE1NTI5OUM0NjYKUldSbXhKbFNwWFMyeDlNelA5ZHg1ME9tNlQ0YW13bHA3ZHpVL1M2UERRVEVzSmk4RXhsV2xxWm0K",
       "endpoints": [
-        "https://github.com/fritzprix/libr-agent/releases/latest/download/latest.json"
+        "https://github.com/StephenLGF/tomato-desktop/releases/latest/download/latest.json"
       ]
     }
   },

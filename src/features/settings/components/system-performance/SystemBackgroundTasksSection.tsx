@@ -37,7 +37,7 @@ function SystemBackgroundTasksSectionComponent({
           <p className="mt-1 text-xs text-muted-foreground">
             {t(
               'settings.system.preventSleepDuringAgentWorkDescription',
-              'Keep the system from idle-sleeping while LibrAgent is open. Does not force the display to stay on. Enabled by default.',
+              'Keep the system from idle-sleeping while Tomato Desktop is open. Does not force the display to stay on. Enabled by default.',
             )}
           </p>
         </div>

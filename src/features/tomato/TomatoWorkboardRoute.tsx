@@ -51,13 +51,13 @@ import {
 
 const STATUS_ORDER = ['新建', 'Bugfix', '修复中', '开发中', '待测试', '测试中'];
 const FILTER_STORAGE_KEYS = {
-  excludedTypes: 'moark:tomato:excluded-types',
-  excludedStatuses: 'moark:tomato:excluded-statuses',
-  knownTypes: 'moark:tomato:known-types',
-  knownStatuses: 'moark:tomato:known-statuses',
-  laneOrder: 'moark:tomato:lane-order',
-  searchQuery: 'moark:tomato:search-query',
-  deferredCards: 'moark:tomato:deferred-cards',
+  excludedTypes: 'tomato-desktop:tomato:excluded-types',
+  excludedStatuses: 'tomato-desktop:tomato:excluded-statuses',
+  knownTypes: 'tomato-desktop:tomato:known-types',
+  knownStatuses: 'tomato-desktop:tomato:known-statuses',
+  laneOrder: 'tomato-desktop:tomato:lane-order',
+  searchQuery: 'tomato-desktop:tomato:search-query',
+  deferredCards: 'tomato-desktop:tomato:deferred-cards',
 } as const;
 const TOMATO_REPOSITORY_LINKS_KEY = 'libragent.tomato.repository-links.v1';
 const PRIORITIES: Record<string, string> = {
@@ -196,9 +196,15 @@ function formatTime(value?: string): string {
   }).format(new Date(value));
 }
 
+function readBrandStorageItem(key: string): string | null {
+  const current = localStorage.getItem(key);
+  if (current !== null) return current;
+  return localStorage.getItem(key.replace(/^tomato-desktop:/, 'moark:'));
+}
+
 function readStoredSet(key: string): Set<string> {
   try {
-    const value: unknown = JSON.parse(localStorage.getItem(key) ?? '[]');
+    const value: unknown = JSON.parse(readBrandStorageItem(key) ?? '[]');
     return new Set(
       Array.isArray(value)
         ? value.filter((item): item is string => typeof item === 'string')
@@ -238,7 +244,7 @@ function storeRepositoryLink(itemId: string, repositoryPath: string): void {
 
 function readStoredStrings(key: string): string[] {
   try {
-    const value: unknown = JSON.parse(localStorage.getItem(key) ?? '[]');
+    const value: unknown = JSON.parse(readBrandStorageItem(key) ?? '[]');
     return Array.isArray(value)
       ? value.filter((item): item is string => typeof item === 'string')
       : [];
@@ -610,7 +616,7 @@ export default function TomatoWorkboardRoute() {
   );
   const [laneDrag, setLaneDrag] = useState<LaneDragState | null>(null);
   const [searchQuery, setSearchQuery] = useState(
-    () => localStorage.getItem(FILTER_STORAGE_KEYS.searchQuery) ?? '',
+    () => readBrandStorageItem(FILTER_STORAGE_KEYS.searchQuery) ?? '',
   );
   const searchInputRef = useRef<HTMLInputElement>(null);
   const boardRef = useRef<HTMLDivElement>(null);

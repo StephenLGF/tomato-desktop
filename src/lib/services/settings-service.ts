@@ -91,7 +91,7 @@ export interface SystemSettings {
   shellRuntimeBootstrap: boolean;
   skillsDirectory?: string;
   /**
-   * When true (default), inhibit system idle sleep while LibrAgent is running.
+   * When true (default), inhibit system idle sleep while Tomato Desktop is running.
    * Does not keep the display forced on.
    */
   preventSleepDuringAgentWork: boolean;

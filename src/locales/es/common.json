@@ -1,5 +1,5 @@
 {
-  "appName": "LibrAgent",
+  "appName": "Tomato Desktop",
   "assistant": {
     "nameLabel": "Nombre del asistente *",
     "namePlaceholder": "Ingrese el nombre del asistente...",
@@ -532,7 +532,7 @@
       "maxSuspendedProcessesPlaceholder": "p. ej., 20",
       "toolResultInlineLimit": "Límite en línea de resultados de herramientas (KB)",
       "toolResultInlineLimitPlaceholder": "p. ej., 16",
-      "toolResultInlineLimitDescription": "Controla cuánto resultado de herramienta permanece en línea antes de que LibrAgent vuelque el resultado completo a un archivo del espacio de trabajo. Los valores más bajos mantienen el contexto del agente más ligero.",
+      "toolResultInlineLimitDescription": "Controla cuánto resultado de herramienta permanece en línea antes de que Tomato Desktop vuelque el resultado completo a un archivo del espacio de trabajo. Los valores más bajos mantienen el contexto del agente más ligero.",
       "shellIsolation": "Nivel de aislamiento de Shell",
       "shellIsolationModes": {
         "basic": "Básico - Acceso completo al PATH (menos seguro)",
@@ -575,7 +575,7 @@
       "maxScheduledTaskGroupsDescription": "Número máximo de grupos distintos de tareas programadas permitidos en la automatización recurrente de trabajo en equipo.",
       "backgroundTasks": "Tareas en segundo plano",
       "preventSleepDuringAgentWork": "Evitar suspensión mientras la app está en ejecución",
-      "preventSleepDuringAgentWorkDescription": "Evita que el sistema entre en suspensión por inactividad mientras LibrAgent está abierto. No fuerza la pantalla encendida. Activado por defecto.",
+      "preventSleepDuringAgentWorkDescription": "Evita que el sistema entre en suspensión por inactividad mientras Tomato Desktop está abierto. No fuerza la pantalla encendida. Activado por defecto.",
       "searchIndexFrequency": "Frecuencia de índice de búsqueda (Min)",
       "searchIndexFrequencyDescription": "Con qué frecuencia la IA mide su búsqueda en memoria. Las actualizaciones más rápidas mantienen la búsqueda fresca pero consumen más batería/CPU.",
       "webActionTimeout": "Tiempo de espera de acción web (Seg)",

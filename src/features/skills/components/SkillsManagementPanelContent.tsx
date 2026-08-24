@@ -114,7 +114,7 @@ export function SkillsManagementPanelContent({
           <p className="text-sm text-muted-foreground max-w-2xl">
             {t(
               'settings.skills.managerDescription',
-              'Install skills into LibrAgent-managed storage. System skills stay read-only, while user skills can be added, replaced, or reset safely.',
+              'Install skills into Tomato Desktop-managed storage. System skills stay read-only, while user skills can be added, replaced, or reset safely.',
             )}
           </p>
         </div>

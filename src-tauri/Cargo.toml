@@ -1,8 +1,8 @@
 [package]
-name = "moark-desktop"
+name = "tomato-desktop"
 version = "0.9.5"
-description = "Moark desktop agent client with Skills and MCP"
-authors = ["Moark"]
+description = "Tomato Desktop agent client with Skills and MCP"
+authors = ["Tomato Desktop"]
 license = "MIT"
 edition = "2021"
 keywords = ["ai", "agent", "multi-agent", "orchestration", "mcp", "model-context-protocol", "react", "desktop", "shareable-config"]

@@ -26,7 +26,7 @@ const logger = getLogger('UpdateContext');
 
 // Delay before the first auto-check so the app can finish initializing.
 const AUTO_CHECK_DELAY_MS = 5_000;
-const RELEASES_URL = 'https://github.com/fritzprix/libr-agent/releases';
+const RELEASES_URL = 'https://github.com/StephenLGF/tomato-desktop/releases';
 
 export type UpdateStatus =
   | 'idle'
@@ -136,7 +136,7 @@ export function UpdateProvider({ children }: UpdateProviderProps) {
       setDownloadProgress(0);
 
       const toastId = toast.loading(
-        `Downloading LibrAgent ${update.version}…`,
+        `Downloading Tomato Desktop ${update.version}…`,
         {
           duration: Infinity,
         },
@@ -184,7 +184,7 @@ export function UpdateProvider({ children }: UpdateProviderProps) {
           rawMessage.includes('os error 13') ||
           rawMessage.includes('Permission denied')
             ? (currentInstallHint ??
-              'Update install failed because this Linux installation is not writable. If you installed LibrAgent via .deb/.rpm, update it with your package manager. For in-app updates, run the AppImage from a writable folder in your home directory.')
+              'Update install failed because this Linux installation is not writable. If you installed Tomato Desktop via .deb/.rpm, update it with your package manager. For in-app updates, run the AppImage from a writable folder in your home directory.')
             : rawMessage;
         logger.error('Update installation failed:', err);
         setStatus('error');
@@ -231,7 +231,7 @@ export function UpdateProvider({ children }: UpdateProviderProps) {
         ? 'A new version is ready to install.'
         : 'A new version is available. Install it from the release page.';
 
-      toast.info(`LibrAgent ${update.version} is available`, {
+      toast.info(`Tomato Desktop ${update.version} is available`, {
         description,
         duration: Infinity,
         action: installSupported

@@ -33,7 +33,7 @@ export class OpenRouterService extends OpenAIService {
       defaultHeaders: {
         // OpenRouter recommends these headers for request attribution
         'HTTP-Referer': 'https://github.com/fritzprix/libr-agent',
-        'X-Title': 'LibrAgent',
+        'X-Title': 'Tomato Desktop',
       },
     });
   }

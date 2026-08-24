@@ -1,5 +1,5 @@
 {
-  "appName": "LibrAgent",
+  "appName": "Tomato Desktop",
   "assistant": {
     "nameLabel": "助手名称 *",
     "namePlaceholder": "输入助手名称...",
@@ -532,7 +532,7 @@
       "maxSuspendedProcessesPlaceholder": "例如：20",
       "toolResultInlineLimit": "工具结果内联限制 (KB)",
       "toolResultInlineLimitPlaceholder": "例如：16",
-      "toolResultInlineLimitDescription": "控制在 LibrAgent 将完整结果写入工作区文件之前，有多少工具输出会保留在内联中。较低的值可让代理上下文更精简。",
+      "toolResultInlineLimitDescription": "控制在 Tomato Desktop 将完整结果写入工作区文件之前，有多少工具输出会保留在内联中。较低的值可让代理上下文更精简。",
       "shellIsolation": "Shell 隔离级别",
       "shellIsolationModes": {
         "basic": "基础 - 完全 PATH 访问（安全性较低）",
@@ -575,7 +575,7 @@
       "maxScheduledTaskGroupsDescription": "在重复团队协作自动化中允许的不同计划任务组的最大数量。",
       "backgroundTasks": "后台任务",
       "preventSleepDuringAgentWork": "应用运行时防止休眠",
-      "preventSleepDuringAgentWorkDescription": "LibrAgent 打开期间防止系统空闲休眠。不会强制保持屏幕常亮。默认开启。",
+      "preventSleepDuringAgentWorkDescription": "Tomato Desktop 打开期间防止系统空闲休眠。不会强制保持屏幕常亮。默认开启。",
       "searchIndexFrequency": "搜索索引频率 (分钟)",
       "searchIndexFrequencyDescription": "AI 更新其内存搜索的频率。更快的更新保持搜索新鲜，但会消耗更多电池/CPU。",
       "webActionTimeout": "Web 操作超时 (秒)",

@@ -1,5 +1,5 @@
 {
-  "appName": "LibrAgent",
+  "appName": "Tomato Desktop",
   "assistant": {
     "nameLabel": "Assistant Name *",
     "namePlaceholder": "Enter assistant name...",
@@ -537,7 +537,7 @@
       "maxSuspendedProcessesPlaceholder": "e.g., 20",
       "toolResultInlineLimit": "Tool Result Inline Limit (KB)",
       "toolResultInlineLimitPlaceholder": "e.g., 16",
-      "toolResultInlineLimitDescription": "Controls how much tool output stays inline before LibrAgent spills the full result to a workspace file. Lower values keep the agent context leaner.",
+      "toolResultInlineLimitDescription": "Controls how much tool output stays inline before Tomato Desktop spills the full result to a workspace file. Lower values keep the agent context leaner.",
       "shellIsolation": "Shell Isolation Level",
       "shellIsolationModes": {
         "basic": "Basic - Full PATH access (less secure)",
@@ -588,7 +588,7 @@
       "maxScheduledTaskGroupsDescription": "Maximum number of distinct scheduled task groups allowed across recurring teamwork automation.",
       "backgroundTasks": "Background Tasks",
       "preventSleepDuringAgentWork": "Prevent sleep while app is running",
-      "preventSleepDuringAgentWorkDescription": "Keep the system from idle-sleeping while LibrAgent is open. Does not force the display to stay on. Enabled by default.",
+      "preventSleepDuringAgentWorkDescription": "Keep the system from idle-sleeping while Tomato Desktop is open. Does not force the display to stay on. Enabled by default.",
       "searchIndexFrequency": "Search Index Frequency (Min)",
       "searchIndexFrequencyDescription": "How often the AI updates its memory search. Faster updates keep search fresh but use more battery/CPU.",
       "webActionTimeout": "Web Action Timeout (Sec)",

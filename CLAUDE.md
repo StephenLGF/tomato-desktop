@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 
 ## Project overview
 
-Moark Desktop is a local-first Tauri 2 desktop application for AI agents. It combines a React/TypeScript frontend with a Rust/Tokio backend, SQLite/SeaORM persistence, built-in and external MCP servers, browser automation, workspace tools, skills, and scheduled/multi-agent workflows. The product is derived from LibrAgent, so historical documentation and release URLs may still use the `LibrAgent` name; use the source and `src-tauri/tauri.conf.json` for current product/runtime identifiers.
+Tomato Desktop is a local-first Tauri 2 desktop application for AI agents. It combines a React/TypeScript frontend with a Rust/Tokio backend, SQLite/SeaORM persistence, built-in and external MCP servers, browser automation, workspace tools, skills, and scheduled/multi-agent workflows. The product is derived from LibrAgent, so historical documentation and compatibility identifiers may still use the `LibrAgent` name; use the source and `src-tauri/tauri.conf.json` for current product/runtime identifiers.
 
 The main application lives at the repository root. The desktop boundary is Tauri: React renders the UI and calls typed frontend service modules, while Rust owns native operations, persistence, agent workflow state, and tool execution.
 

@@ -26,7 +26,7 @@ export function AboutSection() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-foreground">
-              {t('appName', 'Moark Desktop')}
+              {t('appName', 'Tomato Desktop')}
             </p>
             <p className="text-xs text-muted-foreground">
               {t('settings.about.version', 'Version')} {__APP_VERSION__}

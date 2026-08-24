@@ -139,7 +139,10 @@ export function useMigration(): UseMigrationReturn {
       const selected = await open({
         title: '마이그레이션 파일 선택',
         filters: [
-          { name: 'LibrAgent Migration', extensions: ['libragent-migration'] },
+          {
+            name: 'Tomato Desktop Migration',
+            extensions: ['libragent-migration'],
+          },
         ],
         multiple: false,
       });

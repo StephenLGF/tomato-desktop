@@ -64,7 +64,7 @@ const SettingsPage: FC = function SettingsPage() {
               <p className="text-sm text-muted-foreground mt-0.5">
                 {t('settings.versionLabel', {
                   defaultValue: '{{appName}} v{{version}}',
-                  appName: t('appName', 'Moark Desktop'),
+                  appName: t('appName', 'Tomato Desktop'),
                   version: __APP_VERSION__,
                 })}
               </p>

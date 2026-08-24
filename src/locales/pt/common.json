@@ -1,5 +1,5 @@
 {
-  "appName": "LibrAgent",
+  "appName": "Tomato Desktop",
   "assistant": {
     "nameLabel": "Nome do Assistente *",
     "namePlaceholder": "Digite o nome do assistente...",
@@ -532,7 +532,7 @@
       "maxSuspendedProcessesPlaceholder": "ex: 20",
       "toolResultInlineLimit": "Limite inline de resultado de ferramenta (KB)",
       "toolResultInlineLimitPlaceholder": "ex: 16",
-      "toolResultInlineLimitDescription": "Controla quanto da saída da ferramenta permanece inline antes de o LibrAgent despejar o resultado completo em um arquivo do espaço de trabalho. Valores menores mantêm o contexto do agente mais enxuto.",
+      "toolResultInlineLimitDescription": "Controla quanto da saída da ferramenta permanece inline antes de o Tomato Desktop despejar o resultado completo em um arquivo do espaço de trabalho. Valores menores mantêm o contexto do agente mais enxuto.",
       "shellIsolation": "Nível de Isolamento do Shell",
       "shellIsolationModes": {
         "basic": "Básico - Acesso total ao PATH (menos seguro)",
@@ -575,7 +575,7 @@
       "maxScheduledTaskGroupsDescription": "Número máximo de grupos distintos de tarefas agendadas permitidos na automação recorrente de trabalho em equipe.",
       "backgroundTasks": "Tarefas em Segundo Plano",
       "preventSleepDuringAgentWork": "Impedir suspensão enquanto o app estiver em execução",
-      "preventSleepDuringAgentWorkDescription": "Evita que o sistema entre em suspensão ociosa enquanto o LibrAgent estiver aberto. Não mantém a tela ligada à força. Ativado por padrão.",
+      "preventSleepDuringAgentWorkDescription": "Evita que o sistema entre em suspensão ociosa enquanto o Tomato Desktop estiver aberto. Não mantém a tela ligada à força. Ativado por padrão.",
       "searchIndexFrequency": "Frequência do Índice de Busca (Min)",
       "searchIndexFrequencyDescription": "Com que frequência a IA atualiza sua busca na memória. Atualizações mais rápidas mantêm a busca atualizada, mas usam mais bateria/CPU.",
       "webActionTimeout": "Tempo Limite de Ação na Web (Seg)",

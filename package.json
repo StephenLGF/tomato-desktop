@@ -1,9 +1,9 @@
 {
-  "name": "moark-desktop",
+  "name": "tomato-desktop",
   "private": true,
   "version": "0.9.5",
-  "description": "Moark desktop agent client with Skills and MCP",
-  "author": "Moark",
+  "description": "Tomato Desktop agent client with Skills and MCP",
+  "author": "Tomato Desktop",
   "license": "MIT",
   "keywords": [
     "ai",

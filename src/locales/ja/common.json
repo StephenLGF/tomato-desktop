@@ -523,7 +523,7 @@
       "summary": "これらの設定は、実行時の安全策、マルチエージェントの制限、シェル分離を変更します。ほとんどのユーザーは変更しないままで構いません。",
       "title": "高度な実行時制御",
       "toolResultInlineLimit": "ツール結果のインライン上限 (KB)",
-      "toolResultInlineLimitDescription": "ツール出力をどれだけインライン表示するかを制御します。この値を超えると LibrAgent は完全な結果をワークスペースファイルに退避します。値を小さくするとエージェントのコンテキストをより軽く保てます。",
+      "toolResultInlineLimitDescription": "ツール出力をどれだけインライン表示するかを制御します。この値を超えると Tomato Desktop は完全な結果をワークスペースファイルに退避します。値を小さくするとエージェントのコンテキストをより軽く保てます。",
       "toolResultInlineLimitPlaceholder": "例: 16"
     },
     "system": {
@@ -545,7 +545,7 @@
       "workspaceCapacityDescription": "現在のワークスペースのテキストコンテンツの合計制限。",
       "backgroundTasks": "バックグラウンドタスク",
       "preventSleepDuringAgentWork": "アプリ実行中のスリープ防止",
-      "preventSleepDuringAgentWorkDescription": "LibrAgent の起動中、システムのアイドルスリープを防ぎます。ディスプレイを強制点灯はしません。既定はオンです。",
+      "preventSleepDuringAgentWorkDescription": "Tomato Desktop の起動中、システムのアイドルスリープを防ぎます。ディスプレイを強制点灯はしません。既定はオンです。",
       "searchIndexFrequency": "検索インデックス頻度（分）",
       "searchIndexFrequencyDescription": "AIがメモリ検索を更新する頻度。更新を速くすると検索が最新に保たれますが、バッテリー/CPUをより多く消費します。",
       "webActionTimeout": "Webアクションタイムアウト（秒）",
@@ -1236,7 +1236,7 @@
     "retrying": "再試行中...",
     "tryAgain": "もう一度試す"
   },
-  "appName": "LibrAgent",
+  "appName": "Tomato Desktop",
   "knowledge": {
     "assistantFilterAll": "すべてのアシスタント",
     "assistantFilterPlaceholder": "アシスタントで絞り込む",

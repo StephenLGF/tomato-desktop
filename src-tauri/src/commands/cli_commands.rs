@@ -229,7 +229,7 @@ pub async fn claude_code_chat(
             .collect::<Vec<_>>()
             .join("\n");
         command.arg("--append-system-prompt").arg(format!(
-            "Moark managed Agent Skills are available only in these skill roots:\n{roots}\nUse these roots as the authoritative skill source. Do not resolve skills through ~/.claude, ~/.cc-switch, symlinks into those directories, or another Claude installation. When a managed skill is relevant, read its SKILL.md and referenced files from the same managed skill directory, including its references subdirectory."
+            "Tomato Desktop managed Agent Skills are available only in these skill roots:\n{roots}\nUse these roots as the authoritative skill source. Do not resolve skills through ~/.claude, ~/.cc-switch, symlinks into those directories, or another Claude installation. When a managed skill is relevant, read its SKILL.md and referenced files from the same managed skill directory, including its references subdirectory."
         ));
     }
 

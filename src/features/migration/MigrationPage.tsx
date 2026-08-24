@@ -227,7 +227,7 @@ const MigrationPage: FC = () => {
             <p className="text-sm text-muted-foreground">
               {t(
                 'settings.migration.subtitle',
-                'LibrAgent 설정, 어시스턴트, 스케줄러 및 커스텀 스킬을 다른 기기로 이전합니다.',
+                'Tomato Desktop 설정, 어시스턴트, 스케줄러 및 커스텀 스킬을 다른 기기로 이전합니다.',
               )}
             </p>
           </div>
