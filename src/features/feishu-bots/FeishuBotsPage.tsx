@@ -364,7 +364,15 @@ export default function FeishuBotsPage() {
                   <div className="flex items-center gap-2"><KeyRound className="size-4 text-muted-foreground" /><span className="text-muted-foreground">Verification Token</span><span className="ml-auto font-mono text-xs">{maskSecret(bot.verificationToken)}</span></div>
                 </div>
                 <div className="mt-4 flex justify-end gap-2">
-                  <Button variant="outline" size="sm" onClick={() => { setEditingBot(bot); setDialogOpen(true); }}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setEditingBot(bot);
+                      setDialogOpen(true);
+                    }}
+                  >
                     <Pencil className="mr-2 size-3.5" />{t('common.edit', '编辑')}
                   </Button>
                   <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => setDeletingBot(bot)}>
