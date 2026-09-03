@@ -1,8 +1,8 @@
 name: 🌙 Nightly Release
 on:
-  schedule:
-    - cron: '0 15 * * *' # 매일 자정(KST) 실행
-  workflow_dispatch: # 수동 트리거 지원
+  # Publishing requires the repository's Tauri updater signing secrets.
+  # Keep this manual until TAURI_SIGNING_PRIVATE_KEY is configured.
+  workflow_dispatch:
 
 jobs:
   nightly-release:
